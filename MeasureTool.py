@@ -6,7 +6,7 @@ from UM.Event import Event, MouseEvent
 
 from cura.CuraApplication import CuraApplication
 from cura.Scene.CuraSceneNode import CuraSceneNode
-from .MeassurePass import MeasurePass
+from .MeasurePass import MeasurePass
 
 class MeasureTool(Tool):
     def __init__(self, parent = None) -> None:
@@ -21,7 +21,7 @@ class MeasureTool(Tool):
         if event.type == Event.MousePressEvent and MouseEvent.LeftButton in event.buttons and self._controller.getToolsEnabled():
             # Create a pass for picking a world-space location from the mouse location
             active_camera = self._controller.getScene().getActiveCamera()
-            picking_pass = MeassurePass(active_camera.getViewportWidth(), active_camera.getViewportHeight())
+            picking_pass = MeasurePass(active_camera.getViewportWidth(), active_camera.getViewportHeight())
             picking_pass.render()
 
             picked_distance = picking_pass.getPickedDepth(event.x, event.y)
