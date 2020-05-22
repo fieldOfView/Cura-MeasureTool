@@ -21,14 +21,29 @@ class MeasureTool(Tool):
         self._controller = self.getController()
         self._measure_passes = None  # type: Optional[List[MeasurePass]]
 
-        self._position = QVector3D()
+        self._points = [QVector3D(), QVector3D()]
+        self._active_point = 0
 
         self._application.engineCreatedSignal.connect(self._onEngineCreated)
 
-        self.setExposedProperties("Position")
+        self.setExposedProperties("PointA", "PointB", "Distance", "ActivePoint")
 
-    def getPosition(self) -> QVector3D:
-        return self._position
+    def getPointA(self) -> QVector3D:
+        return self._points[0]
+
+    def getPointB(self) -> QVector3D:
+        return self._points[1]
+
+    def getDistance(self) -> QVector3D:
+        return self._points[1] - self._points[0]
+
+    def getActivePoint(self) -> int:
+        return self._active_point
+
+    def setActivePoint(self, active_point: int) -> None:
+        if active_point != self._active_point:
+            self._active_point = active_point
+            self.propertyChanged.emit()
 
     def _onEngineCreated(self) -> None:
         self._application.getMainWindow().viewportRectChanged.connect(self._createPickingPass)
@@ -61,5 +76,10 @@ class MeasureTool(Tool):
                 axis.render()
                 picked_coordinate.append(axis.getPickedCoordinate(event.x, event.y))
 
-            self._position = QVector3D(*picked_coordinate)
+            self._points[self._active_point] = QVector3D(*picked_coordinate)
+            if self._active_point == 0:
+                self._active_point = 1
+            else:
+                self._active_point = 0
+
             self.propertyChanged.emit()
