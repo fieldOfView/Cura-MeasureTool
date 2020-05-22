@@ -5,7 +5,6 @@ from typing import Optional, TYPE_CHECKING
 import os.path
 
 from UM.Qt.QtApplication import QtApplication
-from UM.Math.Vector import Vector
 from UM.Resources import Resources
 
 from UM.View.RenderPass import RenderPass
@@ -22,8 +21,10 @@ if TYPE_CHECKING:
 #
 #   Note that in order to increase precision, the 24 bit depth value is encoded into all three of the R,G & B channels
 class MeasurePass(RenderPass):
-    def __init__(self, width: int, height: int) -> None:
+    def __init__(self, width: int, height: int, axis: int) -> None:
         super().__init__("picking", width, height)
+
+        self._axis = axis
 
         self._renderer = QtApplication.getInstance().getRenderer()
 
@@ -33,8 +34,10 @@ class MeasurePass(RenderPass):
     def render(self) -> None:
         if not self._shader:
             self._shader = OpenGL.getInstance().createShaderProgram(
-                os.path.join(os.path.dirname(os.path.abspath(__file__)), "camera_distance.shader")
+                os.path.join(os.path.dirname(os.path.abspath(__file__)), "coordinates.shader")
             )
+
+        self._shader.setUniformValue("u_axisId", self._axis)
 
         width, height = self.getSize()
         self._gl.glViewport(0, 0, width, height)
@@ -54,7 +57,7 @@ class MeasurePass(RenderPass):
         self.release()
 
     ##  Get the distance in mm from the camera to at a certain pixel coordinate.
-    def getPickedDepth(self, x: int, y: int) -> float:
+    def getPickedCoordinate(self, x: int, y: int) -> float:
         output = self.getOutput()
 
         window_size = self._renderer.getWindowSize()
@@ -65,14 +68,9 @@ class MeasurePass(RenderPass):
         if px < 0 or px > (output.width() - 1) or py < 0 or py > (output.height() - 1):
             return -1
 
-        distance = output.pixel(px, py) # distance in micron, from in r, g & b channels
-        distance = (distance & 0x00ffffff) / 1000. # drop the alpha channel and covert to mm
-        return distance
+        value = output.pixel(px, py) # value in micron, from in r, g & b channels
+        value = (value & 0x00ffffff) / 1000. # drop the alpha channel and covert to mm
+        value = value - 8388.608 # correct for signedness
 
-    ## Get the world coordinates of a picked point
-    def getPickedPosition(self, x: int, y: int) -> Vector:
-        distance = self.getPickedDepth(x, y)
-        camera = self._scene.getActiveCamera()
-        if camera:
-            return camera.getRay(x, y).getPointAlongRay(distance)
-        return Vector()
+        return value
+

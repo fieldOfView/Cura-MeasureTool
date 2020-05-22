@@ -17,18 +17,19 @@ vertex =
     }
 
 fragment =
-    uniform highp vec3 u_viewPosition;
+    uniform lowp int u_axisId;
 
     varying highp vec3 v_vertex;
 
     void main()
     {
-        highp float distance_to_camera = distance(v_vertex, u_viewPosition) * 1000.; // distance in micron
+        highp float coordinate = ((u_axisId == 0) ? v_vertex.x : (u_axisId == 1) ? v_vertex.y : v_vertex.z) * 1000.; // coordinate in micron
+        coordinate += 8388608.; // offset coordinate to account for negative values (half of the coordinate-space: 128 * 256 * 256)
 
         highp vec3 encoded; // encode float into 3 8-bit channels; this gives a precision of a micron at a range of up to ~16 meter
-        encoded.r = floor(distance_to_camera / 65536.0);
-        encoded.g = floor((distance_to_camera - encoded.r * 65536.0) / 256.0);
-        encoded.b = floor(distance_to_camera - encoded.r * 65536.0 - encoded.g * 256.0);
+        encoded.r = floor(coordinate / 65536.0);
+        encoded.g = floor((coordinate - encoded.r * 65536.0) / 256.0);
+        encoded.b = floor(coordinate - encoded.r * 65536.0 - encoded.g * 256.0);
 
         gl_FragColor.rgb = encoded / 255.;
         gl_FragColor.a = 1.0;
@@ -54,7 +55,7 @@ vertex41core =
 
 fragment41core =
     #version 410
-    uniform highp vec3 u_viewPosition;
+    uniform lowp int u_axisId;
 
     in highp vec3 v_vertex;
 
@@ -62,12 +63,13 @@ fragment41core =
 
     void main()
     {
-        highp float distance_to_camera = distance(v_vertex, u_viewPosition) * 1000.; // distance in micron
+        highp float coordinate = ((u_axisId == 0) ? v_vertex.x : (u_axisId == 1) ? v_vertex.y : v_vertex.z) * 1000.; // coordinate in micron
+        coordinate += 8388608.; // offset coordinate to account for negative values (half of the coordinate-space: 128 * 256 * 256)
 
         highp vec3 encoded; // encode float into 3 8-bit channels; this gives a precision of a micron at a range of up to ~16 meter
-        encoded.r = floor(distance_to_camera / 65536.0);
-        encoded.g = floor((distance_to_camera - encoded.r * 65536.0) / 256.0);
-        encoded.b = floor(distance_to_camera - encoded.r * 65536.0 - encoded.g * 256.0);
+        encoded.r = floor(coordinate / 65536.0);
+        encoded.g = floor((coordinate - encoded.r * 65536.0) / 256.0);
+        encoded.b = floor(coordinate - encoded.r * 65536.0 - encoded.g * 256.0);
 
         frag_color.rgb = encoded / 255.;
         frag_color.a = 1.0;
