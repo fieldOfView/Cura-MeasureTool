@@ -11,6 +11,8 @@ from .MeasurePass import MeasurePass
 
 from typing import List, Optional
 
+from PyQt5.QtGui import QVector3D
+
 class MeasureTool(Tool):
     def __init__(self, parent = None) -> None:
         super().__init__()
@@ -19,10 +21,18 @@ class MeasureTool(Tool):
         self._controller = self.getController()
         self._measure_passes = None  # type: Optional[List[MeasurePass]]
 
+        self._position = QVector3D()
+
         self._application.engineCreatedSignal.connect(self._onEngineCreated)
+
+        self.setExposedProperties("Position")
+
+    def getPosition(self) -> QVector3D:
+        return self._position
 
     def _onEngineCreated(self) -> None:
         self._application.getMainWindow().viewportRectChanged.connect(self._createPickingPass)
+        self.propertyChanged.emit()
 
     def _createPickingPass(self) -> None:
         active_camera = self._controller.getScene().getActiveCamera()
@@ -51,4 +61,5 @@ class MeasureTool(Tool):
                 axis.render()
                 picked_coordinate.append(axis.getPickedCoordinate(event.x, event.y))
 
-            print(Vector(*picked_coordinate))
+            self._position = QVector3D(*picked_coordinate)
+            self.propertyChanged.emit()
