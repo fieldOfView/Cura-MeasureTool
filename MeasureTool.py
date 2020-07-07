@@ -9,7 +9,7 @@ from cura.CuraApplication import CuraApplication
 from cura.Scene.CuraSceneNode import CuraSceneNode
 from .MeasurePass import MeasurePass
 
-from typing import List, Optional
+from typing import cast, List, Optional
 
 from PyQt5.QtGui import QVector3D
 
@@ -46,35 +46,40 @@ class MeasureTool(Tool):
             self.propertyChanged.emit()
 
     def _onEngineCreated(self) -> None:
-        self._application.getMainWindow().viewportRectChanged.connect(self._createPickingPass)
+        main_window = self._application.getMainWindow()
+        if not main_window:
+            return
+        main_window.viewportRectChanged.connect(self._createPickingPass)
         self.propertyChanged.emit()
 
     def _createPickingPass(self) -> None:
         active_camera = self._controller.getScene().getActiveCamera()
+        if not active_camera:
+            return
         viewport_width = active_camera.getViewportWidth()
         viewport_height = active_camera.getViewportHeight()
 
         try:
             # Create a set of passes for picking a world-space location from the mouse location
-            self._measure_passes = []  # type: Optional[List[MeassurePass]]
+            self._measure_passes = []  # type: Optional[List[MeasurePass]]
             for axis in range(0,3):
                 self._measure_passes.append(MeasurePass(active_camera.getViewportWidth(), active_camera.getViewportHeight(), axis))
         except:
-            self._measure_passes = []  # type: Optional[List[MeassurePass]]
+            self._measure_passes = []  # type: Optional[List[MeasurePass]]
 
-    def event(self, event) -> None:
-        super().event(event)
+    def event(self, event: Event) -> bool:
+        result = super().event(event)
 
-        if event.type == Event.MousePressEvent and MouseEvent.LeftButton in event.buttons and self._controller.getToolsEnabled():
+        if event.type == Event.MousePressEvent and MouseEvent.LeftButton in cast(MouseEvent, event).buttons and self._controller.getToolsEnabled():
             if not self._measure_passes:
                 self._createPickingPass()
             if not self._measure_passes:
-                return
+                return result
 
             picked_coordinate = []
             for axis in self._measure_passes:
                 axis.render()
-                picked_coordinate.append(axis.getPickedCoordinate(event.x, event.y))
+                picked_coordinate.append(axis.getPickedCoordinate(cast(MouseEvent, event).x, cast(MouseEvent, event).y))
 
             self._points[self._active_point] = QVector3D(*picked_coordinate)
             if self._active_point == 0:
@@ -83,3 +88,5 @@ class MeasureTool(Tool):
                 self._active_point = 0
 
             self.propertyChanged.emit()
+
+        return result
