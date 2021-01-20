@@ -12,9 +12,10 @@ from cura.Scene.CuraSceneNode import CuraSceneNode
 from .MeasurePass import MeasurePass
 from .MeasureToolHandle import MeasureToolHandle
 
-from typing import cast, List, Optional
-
+from PyQt5.QtCore import QObject
 from PyQt5.QtGui import QVector3D
+
+from typing import cast, List, Optional
 
 class MeasureTool(Tool):
     def __init__(self, parent = None) -> None:
@@ -23,14 +24,14 @@ class MeasureTool(Tool):
         self._application = CuraApplication.getInstance()
         self._controller = self.getController()
         self._measure_passes = None  # type: Optional[List[MeasurePass]]
+        self._toolbutton_item = None  # type: Optional[QObject]
+
         self._i18n_catalog = i18nCatalog("cura")
 
         self._points = [QVector3D(), QVector3D()]
         self._active_point = 0
 
         self.setExposedProperties("PointA", "PointB", "Distance", "ActivePoint")
-
-        self._toolbutton_item = None
 
         self._application.engineCreatedSignal.connect(self._onEngineCreated)
         Selection.selectionChanged.connect(self._onSelectionChanged)
@@ -68,7 +69,7 @@ class MeasureTool(Tool):
             return
         self._application.callLater(lambda: self._forceToolEnabled())
 
-    def _findToolbarIcon(self, rootItem):
+    def _findToolbarIcon(self, rootItem: QObject) -> Optional[QObject]:
         for child in rootItem.childItems():
             class_name = child.metaObject().className()
             if class_name.startswith("ToolbarButton_QMLTYPE") and child.property("text") == self._i18n_catalog.i18nc("@label", "Measure"):
