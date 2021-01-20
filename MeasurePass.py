@@ -1,15 +1,18 @@
-# Copyright (c) 2018 Ultimaker B.V.
-# Cura is released under the terms of the LGPLv3 or higher.
+# Copyright (c) 2021 Aldo Hoeben / fieldOfView
+# MeasureTool is released under the terms of the AGPLv3 or higher.
 
 from typing import Optional, TYPE_CHECKING
 import os.path
 
-from UM.Qt.QtApplication import QtApplication
+from cura.CuraApplication import CuraApplication
 from UM.Resources import Resources
 
 from UM.View.RenderPass import RenderPass
 from UM.View.GL.OpenGL import OpenGL
 from UM.View.RenderBatch import RenderBatch
+
+from UM.Math.Matrix import Matrix
+from UM.Math.Vector import Vector
 
 from UM.Scene.Iterator.DepthFirstIterator import DepthFirstIterator
 
@@ -26,10 +29,10 @@ class MeasurePass(RenderPass):
 
         self._axis = axis
 
-        self._renderer = QtApplication.getInstance().getRenderer()
+        self._renderer = CuraApplication.getInstance().getRenderer()
 
         self._shader = None #type: Optional[ShaderProgram]
-        self._scene = QtApplication.getInstance().getController().getScene()
+        self._scene = CuraApplication.getInstance().getController().getScene()
 
     def render(self) -> None:
         if not self._shader:
@@ -51,6 +54,13 @@ class MeasurePass(RenderPass):
         for node in DepthFirstIterator(self._scene.getRoot()): #type: ignore #Ignore type error because iter() should get called automatically by Python syntax.
             if node.callDecoration("isSliceable") and node.getMeshData() and node.isVisible():
                 batch.addItem(node.getWorldTransformation(), node.getMeshData())
+
+        z_fight_distance = 0.2  # Distance between buildplate and disallowed area meshes to prevent z-fighting
+        buildplate_transform = Matrix()
+        buildplate_transform.setToIdentity()
+        buildplate_transform.translate(Vector(0, z_fight_distance, 0))
+        buildplate_mesh = CuraApplication.getInstance().getBuildVolume()._grid_mesh
+        batch.addItem(buildplate_transform, buildplate_mesh)
 
         self.bind()
         batch.render(self._scene.getActiveCamera())
