@@ -1,5 +1,5 @@
-// Copyright (c) 2016 Ultimaker B.V.
-// Uranium is released under the terms of the LGPLv3 or higher.
+// Copyright (c) 2021 Aldo Hoeben / fieldOfView
+// MeasureTool is released under the terms of the AGPLv3 or higher.
 
 import QtQuick 2.2
 import QtQuick.Controls 1.2
@@ -11,7 +11,7 @@ Item
     id: base
     width: childrenRect.width
     height: childrenRect.height
-    UM.I18nCatalog { id: catalog; name: "uranium"}
+    UM.I18nCatalog { id: catalog; name: "cura"}
 
     function roundFloat(input, decimals)
     {
