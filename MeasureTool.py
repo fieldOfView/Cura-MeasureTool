@@ -23,7 +23,7 @@ class MeasureTool(Tool):
 
         self._application = CuraApplication.getInstance()
         self._controller = self.getController()
-        self._measure_passes = None  # type: Optional[List[MeasurePass]]
+        self._measure_passes = []  # type: List[MeasurePass]
         self._toolbutton_item = None  # type: Optional[QObject]
 
         self._i18n_catalog = i18nCatalog("cura")
@@ -96,18 +96,18 @@ class MeasureTool(Tool):
         viewport_width = active_camera.getViewportWidth()
         viewport_height = active_camera.getViewportHeight()
 
+        self._measure_passes.clear()
         try:
             # Create a set of passes for picking a world-space location from the mouse location
-            self._measure_passes = []  # type: Optional[List[MeasurePass]]
             for axis in range(0,3):
                 self._measure_passes.append(MeasurePass(active_camera.getViewportWidth(), active_camera.getViewportHeight(), axis))
         except:
-            self._measure_passes = []  # type: Optional[List[MeasurePass]]
+            pass
 
     def event(self, event: Event) -> bool:
         result = super().event(event)
 
-        if event.type == Event.MousePressEvent and MouseEvent.LeftButton in cast(MouseEvent, event).buttons and self._controller.getToolsEnabled():
+        if event.type == Event.MousePressEvent and MouseEvent.LeftButton in cast(MouseEvent, event).buttons:
             if not self._measure_passes:
                 self._createPickingPass()
             if not self._measure_passes:
