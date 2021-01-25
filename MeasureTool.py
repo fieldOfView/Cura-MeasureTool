@@ -31,6 +31,8 @@ class MeasureTool(Tool):
         self._points = [QVector3D(), QVector3D()]
         self._active_point = 0
 
+        self._handle = MeasureToolHandle() #type: MeasureToolHandle #Because for some reason MyPy thinks this variable contains Optional[ToolHandle].
+
         self.setExposedProperties("PointA", "PointB", "Distance", "ActivePoint")
 
         self._application.engineCreatedSignal.connect(self._onEngineCreated)
