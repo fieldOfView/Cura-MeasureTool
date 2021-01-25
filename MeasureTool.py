@@ -32,6 +32,7 @@ class MeasureTool(Tool):
         self._active_point = 0
 
         self._handle = MeasureToolHandle() #type: MeasureToolHandle #Because for some reason MyPy thinks this variable contains Optional[ToolHandle].
+        self._handle.setTool(self)
 
         self.setExposedProperties("PointA", "PointB", "Distance", "ActivePoint")
 
