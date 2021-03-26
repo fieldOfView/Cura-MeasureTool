@@ -3,6 +3,7 @@
 
 from typing import Optional, TYPE_CHECKING
 import os.path
+from math import inf
 
 from cura.CuraApplication import CuraApplication
 from UM.Resources import Resources
@@ -76,11 +77,12 @@ class MeasurePass(RenderPass):
         py = (0.5 + y / 2.0) * window_size[1]
 
         if px < 0 or px > (output.width() - 1) or py < 0 or py > (output.height() - 1):
-            return -1
+            return inf
 
         value = output.pixel(px, py) # value in micron, from in r, g & b channels
-        value = (value & 0x00ffffff) / 1000. # drop the alpha channel and covert to mm
-        value = value - 8388.608 # correct for signedness
+        if value == 0x00ffffff:
+            return inf
+        value = ((value & 0x00ffffff) - 0x00800000) / 1000. # drop the alpha channel, correct for signedness and covert to mm
 
         return value
 

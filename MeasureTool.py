@@ -15,6 +15,8 @@ from .MeasureToolHandle import MeasureToolHandle
 from PyQt5.QtCore import QObject
 from PyQt5.QtGui import QVector3D
 
+from math import inf
+
 from typing import cast, List, Optional
 
 class MeasureTool(Tool):
@@ -115,9 +117,14 @@ class MeasureTool(Tool):
                 return result
 
             picked_coordinate = []
+            mouse_event = cast(MouseEvent, event)
+
             for axis in self._measure_passes:
                 axis.render()
-                picked_coordinate.append(axis.getPickedCoordinate(cast(MouseEvent, event).x, cast(MouseEvent, event).y))
+                axis_value = axis.getPickedCoordinate(mouse_event.x, mouse_event.y)
+                if axis_value == inf:
+                    return result
+                picked_coordinate.append(axis_value)
 
             self._points[self._active_point] = QVector3D(*picked_coordinate)
             if self._active_point == 0:
