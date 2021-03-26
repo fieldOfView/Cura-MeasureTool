@@ -27,6 +27,7 @@ class MeasureTool(Tool):
         self._controller = self.getController()
         self._measure_passes = []  # type: List[MeasurePass]
         self._toolbutton_item = None  # type: Optional[QObject]
+        self._tool_enabled = False
 
         self._i18n_catalog = i18nCatalog("cura")
 
@@ -40,6 +41,7 @@ class MeasureTool(Tool):
 
         self._application.engineCreatedSignal.connect(self._onEngineCreated)
         Selection.selectionChanged.connect(self._onSelectionChanged)
+        self._controller.activeStageChanged.connect(self._onActiveStageChanged)
 
     def getPointA(self) -> QVector3D:
         return self._points[0]
@@ -74,6 +76,10 @@ class MeasureTool(Tool):
             return
         self._application.callLater(lambda: self._forceToolEnabled())
 
+    def _onActiveStageChanged(self) -> None:
+        self._tool_enabled = self._controller.getActiveStage().getId() == "PrepareStage"
+        self._forceToolEnabled()
+
     def _findToolbarIcon(self, rootItem: QObject) -> Optional[QObject]:
         for child in rootItem.childItems():
             class_name = child.metaObject().className()
@@ -88,9 +94,14 @@ class MeasureTool(Tool):
     def _forceToolEnabled(self) -> None:
         if not self._toolbutton_item:
             return
-        self._toolbutton_item.setProperty("enabled", True)
-        if self._application._previous_active_tool == "MeasureTool":
-            self._controller.setActiveTool(self._application._previous_active_tool)
+        if self._tool_enabled:
+            self._toolbutton_item.setProperty("enabled", True)
+            if self._application._previous_active_tool == "MeasureTool":
+                self._controller.setActiveTool(self._application._previous_active_tool)
+        else:
+            self._toolbutton_item.setProperty("enabled", False)
+            if self._controller.getActiveTool() and self._controller.getActiveTool().getId() == "MeasureTool":
+                self._controller.setActiveTool("")
 
     def _createPickingPass(self) -> None:
         active_camera = self._controller.getScene().getActiveCamera()
@@ -109,6 +120,9 @@ class MeasureTool(Tool):
 
     def event(self, event: Event) -> bool:
         result = super().event(event)
+
+        if not self._tool_enabled:
+            return result
 
         if event.type == Event.MousePressEvent and MouseEvent.LeftButton in cast(MouseEvent, event).buttons:
             if not self._measure_passes:
