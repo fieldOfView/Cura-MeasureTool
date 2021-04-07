@@ -31,6 +31,7 @@ class MeasureTool(Tool):
 
         self._toolbutton_item = None  # type: Optional[QObject]
         self._tool_enabled = False
+        self._dragging = False
 
         self._i18n_catalog = i18nCatalog("cura")
 
@@ -140,31 +141,46 @@ class MeasureTool(Tool):
             self._handle.setParent(self.getController().getScene().getRoot())
             self._handle.setEnabled(True)
 
+        if event.type == Event.MouseReleaseEvent and MouseEvent.LeftButton in cast(MouseEvent, event).buttons:
+            self._dragging = False
+
         if event.type == Event.MousePressEvent and MouseEvent.LeftButton in cast(MouseEvent, event).buttons:
-            if not self._measure_passes:
-                self._createPickingPass()
-            if not self._measure_passes:
-                return result
-
-            picked_coordinate = []
-            mouse_event = cast(MouseEvent, event)
-
-            for axis in self._measure_passes:
-                if self._measure_passes_dirty:
-                    axis.render()
-                axis_value = axis.getPickedCoordinate(mouse_event.x, mouse_event.y)
-                if axis_value == inf:
-                    return result
-                picked_coordinate.append(axis_value)
-            self._measure_passes_dirty = False
-
-            self._points[self._active_point] = QVector3D(*picked_coordinate)
             if self._active_point == 0:
                 self._active_point = 1
             else:
                 self._active_point = 0
 
-            self._controller.getScene().sceneChanged.emit(self._handle)
-            self.propertyChanged.emit()
+            self._dragging = True
+            result = self._handle_mouse_event(event, result)
+
+        if event.type == Event.MouseMoveEvent:
+            if self._dragging:
+                result = self._handle_mouse_event(event, result)
+
+        return result
+
+    def _handle_mouse_event(self, event: Event, result: bool) -> bool:
+        if not self._measure_passes:
+            self._createPickingPass()
+        if not self._measure_passes:
+            return False
+
+        picked_coordinate = []
+        mouse_event = cast(MouseEvent, event)
+
+        for axis in self._measure_passes:
+            if self._measure_passes_dirty:
+                axis.render()
+
+            axis_value = axis.getPickedCoordinate(mouse_event.x, mouse_event.y)
+            if axis_value == inf:
+                return False
+            picked_coordinate.append(axis_value)
+        self._measure_passes_dirty = False
+
+        self._points[self._active_point] = QVector3D(*picked_coordinate)
+
+        self._controller.getScene().sceneChanged.emit(self._handle)
+        self.propertyChanged.emit()
 
         return result
