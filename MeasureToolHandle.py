@@ -21,6 +21,7 @@ class MeasureToolHandle(ToolHandle):
         self._name = "MeasureToolHandle"
 
         self._handle_width = 3
+        self._selection_mesh = MeshData()
 
         self._tool = None  # type: Optional[MeasureTool]
 
