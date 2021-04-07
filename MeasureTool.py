@@ -5,6 +5,7 @@ from UM.Tool import Tool
 from UM.Event import Event, MouseEvent
 from UM.Math.Vector import Vector
 from UM.Scene.Selection import Selection
+from UM.Scene.SceneNode import SceneNode
 from UM.i18n import i18nCatalog
 
 from cura.CuraApplication import CuraApplication
@@ -26,6 +27,8 @@ class MeasureTool(Tool):
         self._application = CuraApplication.getInstance()
         self._controller = self.getController()
         self._measure_passes = []  # type: List[MeasurePass]
+        self._measure_passes_dirty = True
+
         self._toolbutton_item = None  # type: Optional[QObject]
         self._tool_enabled = False
 
@@ -42,6 +45,7 @@ class MeasureTool(Tool):
         self._application.engineCreatedSignal.connect(self._onEngineCreated)
         Selection.selectionChanged.connect(self._onSelectionChanged)
         self._controller.activeStageChanged.connect(self._onActiveStageChanged)
+        self._controller.getScene().sceneChanged.connect(self._onSceneChanged)
 
     def getPointA(self) -> QVector3D:
         return self._points[0]
@@ -79,6 +83,12 @@ class MeasureTool(Tool):
     def _onActiveStageChanged(self) -> None:
         self._tool_enabled = self._controller.getActiveStage().getId() == "PrepareStage"
         self._forceToolEnabled()
+
+    def _onSceneChanged(self, node: SceneNode) -> None:
+        if node == self._handle:
+            return
+
+        self._measure_passes_dirty = True
 
     def _findToolbarIcon(self, rootItem: QObject) -> Optional[QObject]:
         for child in rootItem.childItems():
@@ -140,11 +150,13 @@ class MeasureTool(Tool):
             mouse_event = cast(MouseEvent, event)
 
             for axis in self._measure_passes:
-                axis.render()
+                if self._measure_passes_dirty:
+                    axis.render()
                 axis_value = axis.getPickedCoordinate(mouse_event.x, mouse_event.y)
                 if axis_value == inf:
                     return result
                 picked_coordinate.append(axis_value)
+            self._measure_passes_dirty = False
 
             self._points[self._active_point] = QVector3D(*picked_coordinate)
             if self._active_point == 0:
