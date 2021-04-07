@@ -145,10 +145,19 @@ class MeasureTool(Tool):
             self._dragging = False
 
         if event.type == Event.MousePressEvent and MouseEvent.LeftButton in cast(MouseEvent, event).buttons:
-            if self._active_point == 0:
+            mouse_event = cast(MouseEvent, event)
+            camera = self._controller.getScene().getActiveCamera()
+            distances = []  # type: List[float]
+
+            for point in self._points:
+                projected_point = camera.project(Vector(point.x(), point.y(), point.z()))
+                dx = projected_point[0] - ((camera.getWindowSize()[0] * (mouse_event.x + 1) / camera.getViewportWidth()) -1)
+                dy = projected_point[1] + mouse_event.y
+                distances.append(dx * dx + dy * dy)
+
+            self._active_point = 0
+            if distances[1] < distances[0]:
                 self._active_point = 1
-            else:
-                self._active_point = 0
 
             self._dragging = True
             result = self._handle_mouse_event(event, result)
