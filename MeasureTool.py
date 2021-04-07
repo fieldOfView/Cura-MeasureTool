@@ -124,6 +124,12 @@ class MeasureTool(Tool):
         if not self._tool_enabled:
             return result
 
+        # overridden from ToolHandle.event(), because we also want to show the handle when there is no selection
+        # note that Event.ToolDeactivateEvent is properly handled in ToolHandle.evemt()
+        if event.type == Event.ToolActivateEvent and self._handle:
+            self._handle.setParent(self.getController().getScene().getRoot())
+            self._handle.setEnabled(True)
+
         if event.type == Event.MousePressEvent and MouseEvent.LeftButton in cast(MouseEvent, event).buttons:
             if not self._measure_passes:
                 self._createPickingPass()
@@ -146,6 +152,7 @@ class MeasureTool(Tool):
             else:
                 self._active_point = 0
 
+            self._controller.getScene().sceneChanged.emit(self._handle)
             self.propertyChanged.emit()
 
         return result
