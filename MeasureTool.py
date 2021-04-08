@@ -10,6 +10,7 @@ from UM.i18n import i18nCatalog
 
 from cura.CuraApplication import CuraApplication
 from cura.Scene.CuraSceneNode import CuraSceneNode
+
 from .MeasurePass import MeasurePass
 from .MeasureToolHandle import MeasureToolHandle
 
@@ -47,6 +48,8 @@ class MeasureTool(Tool):
         Selection.selectionChanged.connect(self._onSelectionChanged)
         self._controller.activeStageChanged.connect(self._onActiveStageChanged)
         self._controller.getScene().sceneChanged.connect(self._onSceneChanged)
+
+        self._selection_tool = None #type: Optional[Tool]
 
     def getPointA(self) -> QVector3D:
         return self._points[0]
@@ -136,10 +139,17 @@ class MeasureTool(Tool):
             return result
 
         # overridden from ToolHandle.event(), because we also want to show the handle when there is no selection
-        # note that Event.ToolDeactivateEvent is properly handled in ToolHandle.evemt()
-        if event.type == Event.ToolActivateEvent and self._handle:
-            self._handle.setParent(self.getController().getScene().getRoot())
-            self._handle.setEnabled(True)
+        # disabling the tool oon Event.ToolDeactivateEvent is properly handled in ToolHandle.evemt()
+        if event.type == Event.ToolActivateEvent:
+            if self._handle:
+                self._handle.setParent(self.getController().getScene().getRoot())
+                self._handle.setEnabled(True)
+
+            self._selection_tool = self._controller._selection_tool
+            self._controller.setSelectionTool(None)
+
+        if event.type == Event.ToolDeactivateEvent:
+            self._controller.setSelectionTool(self._selection_tool)
 
         if event.type == Event.MouseReleaseEvent and MouseEvent.LeftButton in cast(MouseEvent, event).buttons:
             self._dragging = False
@@ -165,6 +175,9 @@ class MeasureTool(Tool):
         if event.type == Event.MouseMoveEvent:
             if self._dragging:
                 result = self._handle_mouse_event(event, result)
+
+        if self._selection_tool:
+            self._selection_tool.event(event)
 
         return result
 
