@@ -14,7 +14,8 @@ from cura.Scene.CuraSceneNode import CuraSceneNode
 from .MeasurePass import MeasurePass
 from .MeasureToolHandle import MeasureToolHandle
 
-from PyQt5.QtCore import QObject
+from PyQt5.QtCore import Qt, QObject
+from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QVector3D
 
 from math import inf
@@ -161,17 +162,24 @@ class MeasureTool(Tool):
         if event.type == Event.MousePressEvent and MouseEvent.LeftButton in cast(MouseEvent, event).buttons:
             mouse_event = cast(MouseEvent, event)
             camera = self._controller.getScene().getActiveCamera()
-            distances = []  # type: List[float]
 
-            for point in self._points:
-                projected_point = camera.project(Vector(point.x(), point.y(), point.z()))
-                dx = projected_point[0] - ((camera.getWindowSize()[0] * (mouse_event.x + 1) / camera.getViewportWidth()) -1)
-                dy = projected_point[1] + mouse_event.y
-                distances.append(dx * dx + dy * dy)
+            if QApplication.keyboardModifiers() & Qt.ShiftModifier:
+                if self._active_point == 0:
+                    self._active_point = 1
+                else:
+                    self._active_point = 0
+            else:
+                distances = []  # type: List[float]
 
-            self._active_point = 0
-            if distances[1] < distances[0]:
-                self._active_point = 1
+                for point in self._points:
+                    projected_point = camera.project(Vector(point.x(), point.y(), point.z()))
+                    dx = projected_point[0] - ((camera.getWindowSize()[0] * (mouse_event.x + 1) / camera.getViewportWidth()) -1)
+                    dy = projected_point[1] + mouse_event.y
+                    distances.append(dx * dx + dy * dy)
+
+                self._active_point = 0
+                if distances[1] < distances[0]:
+                    self._active_point = 1
 
             self._dragging = True
             result = self._handle_mouse_event(event, result)
