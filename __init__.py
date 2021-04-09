@@ -11,8 +11,8 @@ def getMetaData():
         "tool": {
             "name": i18n_catalog.i18nc("@label", "Measure"),
             "description": i18n_catalog.i18nc("@info:tooltip", "Measure parts of objects."),
-            "icon": "tool_icon.svg",
-            "tool_panel": "MeasureTool.qml",
+            "icon": "resources/icons/tool_icon.svg",
+            "tool_panel": "resources/qml/MeasureTool.qml",
             "weight": 6
         }
     }

@@ -38,7 +38,7 @@ class MeasurePass(RenderPass):
     def render(self) -> None:
         if not self._shader:
             self._shader = OpenGL.getInstance().createShaderProgram(
-                os.path.join(os.path.dirname(os.path.abspath(__file__)), "coordinates.shader")
+                os.path.join(os.path.dirname(os.path.abspath(__file__)), "resources", "shaders", "coordinates.shader")
             )
 
         self._shader.setUniformValue("u_axisId", self._axis)
