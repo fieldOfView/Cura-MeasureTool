@@ -148,8 +148,12 @@ class MeasureTool(Tool):
             self._selection_tool = self._controller._selection_tool
             self._controller.setSelectionTool(None)
 
+            self._application.callLater(lambda: self._forceToolEnabled())
+
         if event.type == Event.ToolDeactivateEvent:
             self._controller.setSelectionTool(self._selection_tool)
+
+            self._application.callLater(lambda: self._forceToolEnabled())
 
         if event.type == Event.MouseReleaseEvent and MouseEvent.LeftButton in cast(MouseEvent, event).buttons:
             self._dragging = False
