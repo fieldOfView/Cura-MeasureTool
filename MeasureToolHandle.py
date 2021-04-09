@@ -20,7 +20,7 @@ class MeasureToolHandle(ToolHandle):
         super().__init__(parent)
         self._name = "MeasureToolHandle"
 
-        self._handle_width = 3
+        self._handle_width = 2
         self._selection_mesh = MeshData()
 
         self._tool = None  # type: Optional[MeasureTool]
@@ -39,13 +39,25 @@ class MeasureToolHandle(ToolHandle):
         if not self._shader:
             self._shader = OpenGL.getInstance().createShaderProgram(Resources.getPath(Resources.Shaders, "toolhandle.shader"))
 
+        if self._auto_scale:
+            active_camera = self._scene.getActiveCamera()
+            if active_camera.isPerspective():
+                camera_position = active_camera.getWorldPosition()
+                dist = (camera_position - self.getWorldPosition()).length()
+                scale = dist / 400
+            else:
+                view_width = active_camera.getViewportWidth()
+                current_size = view_width + (2 * active_camera.getZoomFactor() * view_width)
+                scale = current_size / view_width * 5
+
+            self.setScale(Vector(scale, scale, scale))
+
         if self._solid_mesh and self._tool:
             for position in [self._tool.getPointA(), self._tool.getPointB()]:
                 self.setPosition(Vector(position.x(), position.y(), position.z()))
                 renderer.queueNode(self, mesh = self._solid_mesh, overlay = False, shader = self._shader)
 
         return True
-
 
 
     def _toMeshData(self, tri_node: trimesh.base.Trimesh) -> MeshData:
