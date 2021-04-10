@@ -86,7 +86,7 @@ class MeasureTool(Tool):
         self._application.callLater(lambda: self._forceToolEnabled())
 
     def _onActiveStageChanged(self) -> None:
-        self._tool_enabled = self._controller.getActiveStage().getId() == "PrepareStage"
+        self._tool_enabled = self._controller.getActiveStage().stageId == "PrepareStage"
         self._forceToolEnabled()
 
     def _onSceneChanged(self, node: SceneNode) -> None:
@@ -115,8 +115,8 @@ class MeasureTool(Tool):
                 self._controller.setActiveTool(self._application._previous_active_tool)
         else:
             self._toolbutton_item.setProperty("enabled", False)
-            if self._controller.getActiveTool() and self._controller.getActiveTool().getId() == "MeasureTool":
-                self._controller.setActiveTool("")
+            if self._controller.getActiveTool() == self:
+                self._controller.setActiveTool(None)
 
     def _createPickingPass(self) -> None:
         active_camera = self._controller.getScene().getActiveCamera()
