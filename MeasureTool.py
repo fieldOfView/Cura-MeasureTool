@@ -106,16 +106,16 @@ class MeasureTool(Tool):
                     return found
         return None
 
-    def _forceToolEnabled(self) -> None:
+    def _forceToolEnabled(self, passive = False) -> None:
         if not self._toolbutton_item:
             return
         if self._tool_enabled:
             self._toolbutton_item.setProperty("enabled", True)
-            if self._application._previous_active_tool == "MeasureTool":
+            if self._application._previous_active_tool == "MeasureTool" and not passive:
                 self._controller.setActiveTool(self._application._previous_active_tool)
         else:
             self._toolbutton_item.setProperty("enabled", False)
-            if self._controller.getActiveTool() == self:
+            if self._controller.getActiveTool() == self and not passive:
                 self._controller.setActiveTool(None)
 
     def _createPickingPass(self) -> None:
@@ -149,12 +149,12 @@ class MeasureTool(Tool):
             self._selection_tool = self._controller._selection_tool
             self._controller.setSelectionTool(None)
 
-            self._application.callLater(lambda: self._forceToolEnabled())
+            self._application.callLater(lambda: self._forceToolEnabled(passive=True))
 
         if event.type == Event.ToolDeactivateEvent:
             self._controller.setSelectionTool(self._selection_tool)
 
-            self._application.callLater(lambda: self._forceToolEnabled())
+            self._application.callLater(lambda: self._forceToolEnabled(passive=True))
 
         if event.type == Event.MouseReleaseEvent and MouseEvent.LeftButton in cast(MouseEvent, event).buttons:
             self._dragging = False
