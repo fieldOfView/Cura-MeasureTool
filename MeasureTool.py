@@ -160,6 +160,11 @@ class MeasureTool(Tool):
 
                 for point in self._points:
                     projected_point = camera.project(Vector(point.x(), point.y(), point.z()))
+                    if not camera.isPerspective():
+                        # Camera.project seems to be incorrect for orthographic views
+                        # This is certainly not correct, but better than without this correction and will have to do for now
+                        # TODO: fix this properly
+                        projected_point = (projected_point[0] / 6, projected_point[1] / 6)
                     dx = projected_point[0] - ((camera.getWindowSize()[0] * (mouse_event.x + 1) / camera.getViewportWidth()) -1)
                     dy = projected_point[1] + mouse_event.y
                     distances.append(dx * dx + dy * dy)
