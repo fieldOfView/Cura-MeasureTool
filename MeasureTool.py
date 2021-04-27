@@ -78,6 +78,8 @@ class MeasureTool(Tool):
         self._forceToolEnabled()
 
         main_window.viewportRectChanged.connect(self._createPickingPass)
+        main_window.widthChanged.connect(self._createPickingPass)
+        main_window.heightChanged.connect(self._createPickingPass)
         self.propertyChanged.emit()
 
     def _onSelectionChanged(self) -> None:
@@ -118,21 +120,6 @@ class MeasureTool(Tool):
             if self._controller.getActiveTool() == self and not passive:
                 self._controller.setActiveTool(None)
 
-    def _createPickingPass(self) -> None:
-        active_camera = self._controller.getScene().getActiveCamera()
-        if not active_camera:
-            return
-        viewport_width = active_camera.getViewportWidth()
-        viewport_height = active_camera.getViewportHeight()
-
-        self._measure_passes.clear()
-        try:
-            # Create a set of passes for picking a world-space location from the mouse location
-            for axis in range(0,3):
-                self._measure_passes.append(MeasurePass(active_camera.getViewportWidth(), active_camera.getViewportHeight(), axis))
-        except:
-            pass
-
     def event(self, event: Event) -> bool:
         result = super().event(event)
 
@@ -161,7 +148,6 @@ class MeasureTool(Tool):
 
         if event.type == Event.MousePressEvent and MouseEvent.LeftButton in cast(MouseEvent, event).buttons:
             mouse_event = cast(MouseEvent, event)
-            camera = self._controller.getScene().getActiveCamera()
 
             if QApplication.keyboardModifiers() & Qt.ShiftModifier:
                 if self._active_point == 0:
@@ -170,6 +156,7 @@ class MeasureTool(Tool):
                     self._active_point = 0
             else:
                 distances = []  # type: List[float]
+                camera = self._controller.getScene().getActiveCamera()
 
                 for point in self._points:
                     projected_point = camera.project(Vector(point.x(), point.y(), point.z()))
@@ -218,3 +205,20 @@ class MeasureTool(Tool):
         self.propertyChanged.emit()
 
         return result
+
+    def _createPickingPass(self, *args, **kwargs) -> None:
+        active_camera = self._controller.getScene().getActiveCamera()
+        if not active_camera:
+            return
+        viewport_width = active_camera.getViewportWidth()
+        viewport_height = active_camera.getViewportHeight()
+
+        self._measure_passes.clear()
+        try:
+            # Create a set of passes for picking a world-space location from the mouse location
+            for axis in range(0,3):
+                self._measure_passes.append(MeasurePass(viewport_width, viewport_height, axis))
+        except:
+            pass
+
+        self._measure_passes_dirty = True
