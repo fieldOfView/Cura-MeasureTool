@@ -32,13 +32,18 @@ class MeasurePass(RenderPass):
 
         self._renderer = CuraApplication.getInstance().getRenderer()
 
-        self._shader = None #type: Optional[ShaderProgram]
+        self._shader = None  # type: Optional[ShaderProgram]
         self._scene = CuraApplication.getInstance().getController().getScene()
 
     def render(self) -> None:
         if not self._shader:
             self._shader = OpenGL.getInstance().createShaderProgram(
-                os.path.join(os.path.dirname(os.path.abspath(__file__)), "resources", "shaders", "coordinates.shader")
+                os.path.join(
+                    os.path.dirname(os.path.abspath(__file__)),
+                    "resources",
+                    "shaders",
+                    "coordinates.shader",
+                )
             )
 
         self._shader.setUniformValue("u_axisId", self._axis)
@@ -52,8 +57,12 @@ class MeasurePass(RenderPass):
         batch = RenderBatch(self._shader)
 
         # Fill up the batch with objects that can be sliced. `
-        for node in DepthFirstIterator(self._scene.getRoot()): #type: ignore #Ignore type error because iter() should get called automatically by Python syntax.
-            if node.callDecoration("isSliceable") and node.getMeshData() and node.isVisible():
+        for node in DepthFirstIterator(self._scene.getRoot()):  # type: ignore #Ignore type error because iter() should get called automatically by Python syntax.
+            if (
+                node.callDecoration("isSliceable")
+                and node.getMeshData()
+                and node.isVisible()
+            ):
                 batch.addItem(node.getWorldTransformation(), node.getMeshData())
 
         z_fight_distance = 0.2  # Distance between buildplate and disallowed area meshes to prevent z-fighting
@@ -79,10 +88,11 @@ class MeasurePass(RenderPass):
         if px < 0 or px > (output.width() - 1) or py < 0 or py > (output.height() - 1):
             return inf
 
-        value = output.pixel(px, py) # value in micron, from in r, g & b channels
-        if value == 0x00ffffff:
+        value = output.pixel(px, py)  # value in micron, from in r, g & b channels
+        if value == 0x00FFFFFF:
             return inf
-        value = ((value & 0x00ffffff) - 0x00800000) / 1000. # drop the alpha channel, correct for signedness and covert to mm
+        value = (
+            (value & 0x00FFFFFF) - 0x00800000
+        ) / 1000.0  # drop the alpha channel, correct for signedness and covert to mm
 
         return value
-

@@ -22,8 +22,9 @@ from math import inf
 
 from typing import cast, List, Optional
 
+
 class MeasureTool(Tool):
-    def __init__(self, parent = None) -> None:
+    def __init__(self, parent=None) -> None:
         super().__init__()
 
         self._application = CuraApplication.getInstance()
@@ -40,7 +41,9 @@ class MeasureTool(Tool):
         self._points = [QVector3D(), QVector3D()]
         self._active_point = 0
 
-        self._handle = MeasureToolHandle() #type: MeasureToolHandle #Because for some reason MyPy thinks this variable contains Optional[ToolHandle].
+        self._handle = (
+            MeasureToolHandle()
+        )  # type: MeasureToolHandle #Because for some reason MyPy thinks this variable contains Optional[ToolHandle].
         self._handle.setTool(self)
 
         self.setExposedProperties("PointA", "PointB", "Distance", "ActivePoint")
@@ -50,7 +53,7 @@ class MeasureTool(Tool):
         self._controller.activeStageChanged.connect(self._onActiveStageChanged)
         self._controller.getScene().sceneChanged.connect(self._onSceneChanged)
 
-        self._selection_tool = None #type: Optional[Tool]
+        self._selection_tool = None  # type: Optional[Tool]
 
     def getPointA(self) -> QVector3D:
         return self._points[0]
@@ -100,15 +103,21 @@ class MeasureTool(Tool):
     def _findToolbarIcon(self, rootItem: QObject) -> Optional[QObject]:
         for child in rootItem.childItems():
             class_name = child.metaObject().className()
-            if class_name.startswith("ToolbarButton_QMLTYPE") and child.property("text") == self._i18n_catalog.i18nc("@label", "Measure"):
+            if class_name.startswith("ToolbarButton_QMLTYPE") and child.property(
+                "text"
+            ) == self._i18n_catalog.i18nc("@label", "Measure"):
                 return child
-            elif class_name.startswith("QQuickItem") or class_name.startswith("QQuickColumn") or class_name.startswith("Toolbar_QMLTYPE"):
+            elif (
+                class_name.startswith("QQuickItem")
+                or class_name.startswith("QQuickColumn")
+                or class_name.startswith("Toolbar_QMLTYPE")
+            ):
                 found = self._findToolbarIcon(child)
                 if found:
                     return found
         return None
 
-    def _forceToolEnabled(self, passive = False) -> None:
+    def _forceToolEnabled(self, passive=False) -> None:
         if not self._toolbutton_item:
             return
         if self._tool_enabled:
@@ -143,10 +152,16 @@ class MeasureTool(Tool):
 
             self._application.callLater(lambda: self._forceToolEnabled(passive=True))
 
-        if event.type == Event.MouseReleaseEvent and MouseEvent.LeftButton in cast(MouseEvent, event).buttons:
+        if (
+            event.type == Event.MouseReleaseEvent
+            and MouseEvent.LeftButton in cast(MouseEvent, event).buttons
+        ):
             self._dragging = False
 
-        if event.type == Event.MousePressEvent and MouseEvent.LeftButton in cast(MouseEvent, event).buttons:
+        if (
+            event.type == Event.MousePressEvent
+            and MouseEvent.LeftButton in cast(MouseEvent, event).buttons
+        ):
             mouse_event = cast(MouseEvent, event)
 
             if QApplication.keyboardModifiers() & Qt.ShiftModifier:
@@ -160,7 +175,9 @@ class MeasureTool(Tool):
 
                 for point in self._points:
                     if camera.isPerspective():
-                        projected_point = camera.project(Vector(point.x(), point.y(), point.z()))
+                        projected_point = camera.project(
+                            Vector(point.x(), point.y(), point.z())
+                        )
                     else:
                         # Camera.project() does not work for orthographic views in Cura 4.9 and before, so we calculate our own projection
                         projection = camera.getProjectionMatrix()
@@ -172,7 +189,14 @@ class MeasureTool(Tool):
                         position = position.preMultiply(projection)
 
                         projected_point = (position.x, position.y)
-                    dx = projected_point[0] - ((camera.getWindowSize()[0] * (mouse_event.x + 1) / camera.getViewportWidth()) -1)
+                    dx = projected_point[0] - (
+                        (
+                            camera.getWindowSize()[0]
+                            * (mouse_event.x + 1)
+                            / camera.getViewportWidth()
+                        )
+                        - 1
+                    )
                     dy = projected_point[1] + mouse_event.y
                     distances.append(dx * dx + dy * dy)
 
@@ -228,8 +252,10 @@ class MeasureTool(Tool):
         self._measure_passes.clear()
         try:
             # Create a set of passes for picking a world-space location from the mouse location
-            for axis in range(0,3):
-                self._measure_passes.append(MeasurePass(viewport_width, viewport_height, axis))
+            for axis in range(0, 3):
+                self._measure_passes.append(
+                    MeasurePass(viewport_width, viewport_height, axis)
+                )
         except:
             pass
 

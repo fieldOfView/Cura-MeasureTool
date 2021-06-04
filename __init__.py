@@ -4,18 +4,23 @@
 from . import MeasureTool
 
 from UM.i18n import i18nCatalog
+
 i18n_catalog = i18nCatalog("cura")
+
 
 def getMetaData():
     return {
         "tool": {
             "name": i18n_catalog.i18nc("@label", "Measure"),
-            "description": i18n_catalog.i18nc("@info:tooltip", "Measure parts of objects."),
+            "description": i18n_catalog.i18nc(
+                "@info:tooltip", "Measure parts of objects."
+            ),
             "icon": "resources/icons/tool_icon.svg",
             "tool_panel": "resources/qml/MeasureTool.qml",
-            "weight": 6
+            "weight": 6,
         }
     }
 
+
 def register(app):
-    return { "tool": MeasureTool.MeasureTool() }
+    return {"tool": MeasureTool.MeasureTool()}

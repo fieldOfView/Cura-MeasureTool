@@ -11,12 +11,13 @@ import trimesh
 import numpy
 
 from typing import Optional, TYPE_CHECKING
+
 if TYPE_CHECKING:
     from .MeasureTool import MeasureTool
 
-class MeasureToolHandle(ToolHandle):
 
-    def __init__(self, parent = None) -> None:
+class MeasureToolHandle(ToolHandle):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self._name = "MeasureToolHandle"
 
@@ -25,19 +26,20 @@ class MeasureToolHandle(ToolHandle):
 
         self._tool = None  # type: Optional[MeasureTool]
 
-
     def setTool(self, tool: "MeasureTool") -> None:
         self._tool = tool
 
-
     def buildMesh(self) -> None:
-        mesh = self._toMeshData(trimesh.creation.icosphere(subdivisions=2,radius = self._handle_width / 2))
+        mesh = self._toMeshData(
+            trimesh.creation.icosphere(subdivisions=2, radius=self._handle_width / 2)
+        )
         self.setSolidMesh(mesh)
-
 
     def render(self, renderer) -> bool:
         if not self._shader:
-            self._shader = OpenGL.getInstance().createShaderProgram(Resources.getPath(Resources.Shaders, "toolhandle.shader"))
+            self._shader = OpenGL.getInstance().createShaderProgram(
+                Resources.getPath(Resources.Shaders, "toolhandle.shader")
+            )
 
         if self._auto_scale:
             active_camera = self._scene.getActiveCamera()
@@ -47,7 +49,9 @@ class MeasureToolHandle(ToolHandle):
                 scale = dist / 400
             else:
                 view_width = active_camera.getViewportWidth()
-                current_size = view_width + (2 * active_camera.getZoomFactor() * view_width)
+                current_size = view_width + (
+                    2 * active_camera.getZoomFactor() * view_width
+                )
                 scale = current_size / view_width * 5
 
             self.setScale(Vector(scale, scale, scale))
@@ -55,10 +59,11 @@ class MeasureToolHandle(ToolHandle):
         if self._solid_mesh and self._tool:
             for position in [self._tool.getPointA(), self._tool.getPointB()]:
                 self.setPosition(Vector(position.x(), position.y(), position.z()))
-                renderer.queueNode(self, mesh = self._solid_mesh, overlay = False, shader = self._shader)
+                renderer.queueNode(
+                    self, mesh=self._solid_mesh, overlay=False, shader=self._shader
+                )
 
         return True
-
 
     def _toMeshData(self, tri_node: trimesh.base.Trimesh) -> MeshData:
         tri_faces = tri_node.faces
