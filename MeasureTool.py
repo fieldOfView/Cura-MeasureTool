@@ -92,6 +92,10 @@ class MeasureTool(Tool):
 
     def _onActiveStageChanged(self) -> None:
         self._tool_enabled = self._controller.getActiveStage().stageId == "PrepareStage"
+        if not self._tool_enabled:
+            self._controller.setSelectionTool(self._selection_tool)
+            if self._controller.getActiveTool() == self:
+                self._controller.setActiveTool(self._getFallbackTool())
         self._forceToolEnabled()
 
     def _onSceneChanged(self, node: SceneNode) -> None:
@@ -127,7 +131,7 @@ class MeasureTool(Tool):
         else:
             self._toolbutton_item.setProperty("enabled", False)
             if self._controller.getActiveTool() == self and not passive:
-                self._controller.setActiveTool(None)
+                self._controller.setActiveTool(self._getFallbackTool())
 
     def event(self, event: Event) -> bool:
         result = super().event(event)
@@ -260,3 +264,9 @@ class MeasureTool(Tool):
             pass
 
         self._measure_passes_dirty = True
+
+    def _getFallbackTool(self) -> str:
+        try:
+            return self._controller._fallback_tool
+        except AttributeError:
+            return "TranslateTool"
