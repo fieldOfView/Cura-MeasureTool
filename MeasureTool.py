@@ -6,6 +6,7 @@ from UM.Event import Event, MouseEvent
 from UM.Math.Vector import Vector
 from UM.Scene.Selection import Selection
 from UM.Scene.SceneNode import SceneNode
+from UM.Logger import Logger
 from UM.i18n import i18nCatalog
 
 from cura.CuraApplication import CuraApplication
@@ -124,14 +125,23 @@ class MeasureTool(Tool):
     def _forceToolEnabled(self, passive=False) -> None:
         if not self._toolbutton_item:
             return
-        if self._tool_enabled:
-            self._toolbutton_item.setProperty("enabled", True)
-            if self._application._previous_active_tool == "MeasureTool" and not passive:
-                self._controller.setActiveTool(self._application._previous_active_tool)
-        else:
-            self._toolbutton_item.setProperty("enabled", False)
-            if self._controller.getActiveTool() == self and not passive:
-                self._controller.setActiveTool(self._getFallbackTool())
+        try:
+            if self._tool_enabled:
+                self._toolbutton_item.setProperty("enabled", True)
+                if self._application._previous_active_tool == "MeasureTool" and not passive:
+                    self._controller.setActiveTool(self._application._previous_active_tool)
+            else:
+                self._toolbutton_item.setProperty("enabled", False)
+                if self._controller.getActiveTool() == self and not passive:
+                    self._controller.setActiveTool(self._getFallbackTool())
+        except RuntimeError:
+            Logger.log("w", "The toolbutton item seems to have gone missing; trying to find it back.")
+            main_window = self._application.getMainWindow()
+            if not main_window:
+                return
+
+            self._toolbutton_item = self._findToolbarIcon(main_window.contentItem())
+
 
     def event(self, event: Event) -> bool:
         result = super().event(event)
