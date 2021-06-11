@@ -52,6 +52,7 @@ class MeasureTool(Tool):
         self._application.engineCreatedSignal.connect(self._onEngineCreated)
         Selection.selectionChanged.connect(self._onSelectionChanged)
         self._controller.activeStageChanged.connect(self._onActiveStageChanged)
+        self._controller.activeToolChanged.connect(self._onActiveToolChanged)
         self._controller.getScene().sceneChanged.connect(self._onSceneChanged)
 
         self._selection_tool = None  # type: Optional[Tool]
@@ -98,6 +99,10 @@ class MeasureTool(Tool):
             if self._controller.getActiveTool() == self:
                 self._controller.setActiveTool(self._getFallbackTool())
         self._forceToolEnabled()
+
+    def _onActiveToolChanged(self) -> None:
+        if self._controller.getActiveTool() == self:
+            self._controller.setSelectionTool(self._selection_tool)
 
     def _onSceneChanged(self, node: SceneNode) -> None:
         if node == self._handle:
