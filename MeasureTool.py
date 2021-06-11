@@ -95,14 +95,16 @@ class MeasureTool(Tool):
     def _onActiveStageChanged(self) -> None:
         self._tool_enabled = self._controller.getActiveStage().stageId == "PrepareStage"
         if not self._tool_enabled:
-            self._controller.setSelectionTool(self._selection_tool)
+            self._controller.setSelectionTool(self._selection_tool or "SelectionTool")
+            self._selection_tool = None
             if self._controller.getActiveTool() == self:
                 self._controller.setActiveTool(self._getFallbackTool())
         self._forceToolEnabled()
 
     def _onActiveToolChanged(self) -> None:
-        if self._controller.getActiveTool() == self:
-            self._controller.setSelectionTool(self._selection_tool)
+        if self._controller.getActiveTool() != self:
+            self._controller.setSelectionTool(self._selection_tool or "SelectionTool")
+            self._selection_tool = None
 
     def _onSceneChanged(self, node: SceneNode) -> None:
         if node == self._handle:
@@ -167,7 +169,8 @@ class MeasureTool(Tool):
             self._application.callLater(lambda: self._forceToolEnabled(passive=True))
 
         if event.type == Event.ToolDeactivateEvent:
-            self._controller.setSelectionTool(self._selection_tool)
+            self._controller.setSelectionTool(self._selection_tool or "SelectionTool")
+            self._selection_tool = None
 
             self._application.callLater(lambda: self._forceToolEnabled(passive=True))
 
