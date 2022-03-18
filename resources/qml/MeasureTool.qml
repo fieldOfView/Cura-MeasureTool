@@ -2,7 +2,7 @@
 // MeasureTool is released under the terms of the AGPLv3 or higher.
 
 import QtQuick 2.2
-import QtQuick.Controls 1.2
+import QtQuick.Controls 2.0
 
 import UM 1.1 as UM
 
