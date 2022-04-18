@@ -15,9 +15,14 @@ from cura.Scene.CuraSceneNode import CuraSceneNode
 from .MeasurePass import MeasurePass
 from .MeasureToolHandle import MeasureToolHandle
 
-from PyQt5.QtCore import Qt, QObject
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QtGui import QVector3D
+try:
+    from PyQt6.QtCore import Qt, QObject
+    from PyQt6.QtWidgets import QApplication
+    from PyQt6.QtGui import QVector3D
+except ImportError:
+    from PyQt5.QtCore import Qt, QObject
+    from PyQt5.QtWidgets import QApplication
+    from PyQt5.QtGui import QVector3D
 
 from math import inf
 
