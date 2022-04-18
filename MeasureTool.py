@@ -191,7 +191,11 @@ class MeasureTool(Tool):
         ):
             mouse_event = cast(MouseEvent, event)
 
-            if QApplication.keyboardModifiers() & Qt.ShiftModifier:
+            try:
+                shift_modifier = Qt.KeyboardModifier.ShiftModifier
+            except AttributeError:
+                shift_modifier = Qt.ShiftModifier
+            if QApplication.keyboardModifiers() & shift_modifier:
                 if self._active_point == 0:
                     self._active_point = 1
                 else:
