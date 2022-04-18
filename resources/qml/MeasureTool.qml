@@ -11,7 +11,7 @@ Item
     id: base
     width: childrenRect.width
     height: childrenRect.height
-    UM.I18nCatalog { id: catalog; name: "cura"}
+    UM.I18nCatalog { id: catalog; name: "measuretool"}
 
     function roundFloat(input, decimals)
     {

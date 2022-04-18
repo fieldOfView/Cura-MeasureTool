@@ -42,7 +42,7 @@ class MeasureTool(Tool):
         self._tool_enabled = False
         self._dragging = False
 
-        self._i18n_catalog = i18nCatalog("cura")
+        self._i18n_catalog = i18nCatalog("measuretool")
 
         self._points = [QVector3D(), QVector3D()]
         self._active_point = 0
