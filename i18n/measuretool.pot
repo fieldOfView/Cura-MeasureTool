@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Measure Tool\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 13:39+0000\n"
+"POT-Creation-Date: 2022-04-19 13:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,4 +25,19 @@ msgstr ""
 #: __init__.py:18
 msgctxt "@info:tooltip"
 msgid "Measure parts of objects."
+msgstr ""
+
+#: resources/qml/MeasureTool.qml:89
+msgctxt "@label"
+msgid "From"
+msgstr ""
+
+#: resources/qml/MeasureTool.qml:132
+msgctxt "@label"
+msgid "To"
+msgstr ""
+
+#: resources/qml/MeasureTool.qml:175
+msgctxt "@label"
+msgid "Distance"
 msgstr ""
