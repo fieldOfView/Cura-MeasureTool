@@ -86,7 +86,7 @@ Item
         Label
         {
             height: UM.Theme.getSize("setting_control").height
-            text: "From"
+            text: catalog.i18nc("@label", "From")
             font: UM.ActiveTool.properties.getValue("ActivePoint") == 0 ? UM.Theme.getFont("default_bold") : UM.Theme.getFont("default")
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
@@ -129,7 +129,7 @@ Item
         Label
         {
             height: UM.Theme.getSize("setting_control").height
-            text: "To"
+            text: catalog.i18nc("@label", "To")
             font: UM.ActiveTool.properties.getValue("ActivePoint") == 1 ? UM.Theme.getFont("default_bold") : UM.Theme.getFont("default")
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
@@ -172,7 +172,7 @@ Item
         Label
         {
             height: UM.Theme.getSize("setting_control").height
-            text: "Distance"
+            text: catalog.i18nc("@label", "Distance")
             font: UM.Theme.getFont("default")
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
