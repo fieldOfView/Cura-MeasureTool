@@ -3,6 +3,7 @@
 
 import QtQuick 2.2
 import QtQuick.Controls 2.0
+import QtQuick.Layouts 1.3
 
 import UM 1.1 as UM
 
@@ -12,16 +13,19 @@ Item
     width: childrenRect.width
     height: childrenRect.height
     UM.I18nCatalog { id: catalog; name: "measuretool"}
+    property real unitFactor: UM.Preferences.getValue("measuretool/unit_factor")
 
-    function roundFloat(input, decimals)
+    function formatMeasurement(input)
     {
-        //First convert to fixed-point notation to round the number to 4 decimals and not introduce new floating point errors.
-        //Then convert to a string (is implicit). The fixed-point notation will be something like "3.200".
-        //Then remove any trailing zeroes and the radix.
+        var decimals = 3;
+
+        // First convert to fixed-point notation to round the number to 4 decimals and not introduce new floating point errors.
+        // Then convert to a string (is implicit). The fixed-point notation will be something like "3.200".
+        // Then remove any trailing zeroes and the radix.
         var output = "";
         if (input !== undefined)
         {
-            output = input.toFixed(decimals).replace(/\.?0*$/, ""); //Match on periods, if any ( \.? ), followed by any number of zeros ( 0* ), then the end of string ( $ ).
+            output = (input / unitFactor).toFixed(decimals).replace(/\.?0*$/, ""); //Match on periods, if any ( \.? ), followed by any number of zeros ( 0* ), then the end of string ( $ ).
         }
         if (output == "-0")
         {
@@ -30,56 +34,20 @@ Item
         return output;
     }
 
-    Grid
+    GridLayout
     {
-        id: textfields;
+        id: textfields
 
-        anchors.leftMargin: UM.Theme.getSize("default_margin").width;
-        anchors.top: parent.top;
+        anchors.leftMargin: UM.Theme.getSize("default_margin").width
+        anchors.top: parent.top
 
-        columns: 4;
-        flow: Grid.TopToBottom;
-        spacing: Math.round(UM.Theme.getSize("default_margin").width / 2);
+        columns: 4
+        columnSpacing: Math.round(UM.Theme.getSize("default_margin").width / 2)
+        rowSpacing: columnSpacing
 
-        property int cellWidth: Math.floor(UM.Theme.getSize("setting_control").width * .4)
         property var pointA: UM.ActiveTool.properties.getValue("PointA")
         property var pointB: UM.ActiveTool.properties.getValue("PointB")
         property var distance: UM.ActiveTool.properties.getValue("Distance")
-
-        Item { width: height; height: UM.Theme.getSize("setting_control").height }
-
-        Label
-        {
-            height: UM.Theme.getSize("setting_control").height
-            width: Math.ceil(contentWidth) //Make sure that the grid cells have an integer width.
-            text: "X"
-            font: UM.Theme.getFont("default")
-            color: UM.Theme.getColor("x_axis")
-            verticalAlignment: Text.AlignVCenter
-            renderType: Text.NativeRendering
-        }
-
-        Label
-        {
-            height: UM.Theme.getSize("setting_control").height
-            width: Math.ceil(contentWidth) //Make sure that the grid cells have an integer width.
-            text: "Y"
-            font: UM.Theme.getFont("default")
-            color: UM.Theme.getColor("z_axis") // This is intentional. The internal axis are switched.
-            verticalAlignment: Text.AlignVCenter
-            renderType: Text.NativeRendering
-        }
-
-        Label
-        {
-            height: UM.Theme.getSize("setting_control").height;
-            width: Math.ceil(contentWidth) //Make sure that the grid cells have an integer width.
-            text: "Z";
-            font: UM.Theme.getFont("default")
-            color: UM.Theme.getColor("y_axis") // This is intentional. The internal axis are switched.
-            verticalAlignment: Text.AlignVCenter
-            renderType: Text.NativeRendering
-        }
 
         Item { width: height; height: UM.Theme.getSize("setting_control").height }
 
@@ -96,38 +64,6 @@ Item
 
         Label
         {
-            width: parent.cellWidth
-            height: UM.Theme.getSize("setting_control").height
-            color: UM.Theme.getColor("text")
-            verticalAlignment: Text.AlignVCenter
-            renderType: Text.NativeRendering
-            text: base.roundFloat(parent.pointA.x, 3)
-        }
-
-        Label
-        {
-            width: parent.cellWidth
-            height: UM.Theme.getSize("setting_control").height
-            color: UM.Theme.getColor("text")
-            verticalAlignment: Text.AlignVCenter
-            renderType: Text.NativeRendering
-            text: base.roundFloat(parent.pointA.z, 3)
-        }
-
-        Label
-        {
-            width: parent.cellWidth
-            height: UM.Theme.getSize("setting_control").height
-            color: UM.Theme.getColor("text")
-            verticalAlignment: Text.AlignVCenter
-            renderType: Text.NativeRendering
-            text: base.roundFloat(parent.pointA.y, 3)
-        }
-
-        Item { width: height; height: UM.Theme.getSize("setting_control").height }
-
-        Label
-        {
             height: UM.Theme.getSize("setting_control").height
             text: catalog.i18nc("@label", "To")
             font: UM.ActiveTool.properties.getValue("ActivePoint") == 1 ? UM.Theme.getFont("default_bold") : UM.Theme.getFont("default")
@@ -136,38 +72,6 @@ Item
             renderType: Text.NativeRendering
             width: Math.ceil(contentWidth) //Make sure that the grid cells have an integer width.
         }
-
-        Label
-        {
-            width: parent.cellWidth
-            height: UM.Theme.getSize("setting_control").height
-            color: UM.Theme.getColor("text")
-            verticalAlignment: Text.AlignVCenter
-            renderType: Text.NativeRendering
-            text: base.roundFloat(parent.pointB.x, 3)
-        }
-
-        Label
-        {
-            width: parent.cellWidth
-            height: UM.Theme.getSize("setting_control").height
-            color: UM.Theme.getColor("text")
-            verticalAlignment: Text.AlignVCenter
-            renderType: Text.NativeRendering
-            text: base.roundFloat(parent.pointB.z, 3)
-        }
-
-        Label
-        {
-            width: parent.cellWidth
-            height: UM.Theme.getSize("setting_control").height
-            color: UM.Theme.getColor("text")
-            verticalAlignment: Text.AlignVCenter
-            renderType: Text.NativeRendering
-            text: base.roundFloat(parent.pointB.y, 3)
-        }
-
-        Item { width: height; height: UM.Theme.getSize("setting_control").height }
 
         Label
         {
@@ -182,12 +86,13 @@ Item
 
         Label
         {
-            width: parent.cellWidth
             height: UM.Theme.getSize("setting_control").height
-            color: UM.Theme.getColor("text")
+            width: Math.ceil(contentWidth) //Make sure that the grid cells have an integer width.
+            text: "X"
+            font: UM.Theme.getFont("default")
+            color: UM.Theme.getColor("x_axis")
             verticalAlignment: Text.AlignVCenter
             renderType: Text.NativeRendering
-            text: base.roundFloat(Math.abs(parent.distance.x), 3)
         }
 
         Label
@@ -197,7 +102,7 @@ Item
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
             renderType: Text.NativeRendering
-            text: base.roundFloat(Math.abs(parent.distance.z), 3)
+            text: base.formatMeasurement(parent.pointA.x)
         }
 
         Label
@@ -207,7 +112,7 @@ Item
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
             renderType: Text.NativeRendering
-            text: base.roundFloat(Math.abs(parent.distance.y), 3)
+            text: base.formatMeasurement(parent.pointB.x)
         }
 
         Label
@@ -217,7 +122,169 @@ Item
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
             renderType: Text.NativeRendering
-            text: base.roundFloat(parent.distance.length(), 3)
+            text: base.formatMeasurement(Math.abs(parent.distance.x))
+        }
+
+        Label
+        {
+            height: UM.Theme.getSize("setting_control").height
+            width: Math.ceil(contentWidth) //Make sure that the grid cells have an integer width.
+            text: "Y"
+            font: UM.Theme.getFont("default")
+            color: UM.Theme.getColor("z_axis") // This is intentional. The internal axis are switched.
+            verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
+        }
+
+        Label
+        {
+            width: parent.cellWidth
+            height: UM.Theme.getSize("setting_control").height
+            color: UM.Theme.getColor("text")
+            verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
+            text: base.formatMeasurement(parent.pointA.z)
+        }
+
+        Label
+        {
+            width: parent.cellWidth
+            height: UM.Theme.getSize("setting_control").height
+            color: UM.Theme.getColor("text")
+            verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
+            text: base.formatMeasurement(parent.pointB.z)
+        }
+
+        Label
+        {
+            width: parent.cellWidth
+            height: UM.Theme.getSize("setting_control").height
+            color: UM.Theme.getColor("text")
+            verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
+            text: base.formatMeasurement(Math.abs(parent.distance.z))
+        }
+
+        Label
+        {
+            height: UM.Theme.getSize("setting_control").height;
+            width: Math.ceil(contentWidth) //Make sure that the grid cells have an integer width.
+            text: "Z";
+            font: UM.Theme.getFont("default")
+            color: UM.Theme.getColor("y_axis") // This is intentional. The internal axis are switched.
+            verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
+        }
+
+        Label
+        {
+            width: parent.cellWidth
+            height: UM.Theme.getSize("setting_control").height
+            color: UM.Theme.getColor("text")
+            verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
+            text: base.formatMeasurement(parent.pointA.y)
+        }
+
+        Label
+        {
+            width: parent.cellWidth
+            height: UM.Theme.getSize("setting_control").height
+            color: UM.Theme.getColor("text")
+            verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
+            text: base.formatMeasurement(parent.pointB.y)
+        }
+
+        Label
+        {
+            width: parent.cellWidth
+            height: UM.Theme.getSize("setting_control").height
+            color: UM.Theme.getColor("text")
+            verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
+            text: base.formatMeasurement(Math.abs(parent.distance.y))
+        }
+
+
+        Label
+        {
+            height: UM.Theme.getSize("setting_control").height
+            width: Math.ceil(contentWidth) //Make sure that the grid cells have an integer width.
+            text: catalog.i18nc("@label", "Diagonal")
+            font: UM.Theme.getFont("default")
+            color: UM.Theme.getColor("text") // This is intentional. The internal axis are switched.
+            verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
+        }
+
+        Item { width: height; height: UM.Theme.getSize("setting_control").height; Layout.columnSpan:2 }
+
+        Label
+        {
+            width: parent.cellWidth
+            height: UM.Theme.getSize("setting_control").height
+            color: UM.Theme.getColor("text")
+            verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
+            text: base.formatMeasurement(parent.distance.length())
+        }
+
+        Label
+        {
+            height: UM.Theme.getSize("setting_control").height
+            width: Math.ceil(contentWidth) //Make sure that the grid cells have an integer width.
+            text: catalog.i18nc("@label", "Unit")
+            font: UM.Theme.getFont("default")
+            color: UM.Theme.getColor("text") // This is intentional. The internal axis are switched.
+            verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
+        }
+
+        ListModel
+        {
+            id: unitsList
+            Component.onCompleted:
+            {
+                append({ text: catalog.i18nc("@option:unit", "Micron"), factor: 0.001 })
+                append({ text: catalog.i18nc("@option:unit", "Millimeter (default)"), factor: 1 })
+                append({ text: catalog.i18nc("@option:unit", "Centimeter"), factor: 10 })
+                append({ text: catalog.i18nc("@option:unit", "Meter"), factor: 1000 })
+                append({ text: catalog.i18nc("@option:unit", "Inch"), factor: 25.4 })
+                append({ text: catalog.i18nc("@option:unit", "Feet"), factor: 304.8 })
+            }
+        }
+
+        ComboBox
+        {
+            id: unitDropDownButton
+
+            Layout.columnSpan: 3
+
+            textRole: "text"
+            model: unitsList
+
+            implicitWidth: UM.Theme.getSize("combobox").width
+            implicitHeight: UM.Theme.getSize("combobox").height
+
+            currentIndex:
+            {
+                var currentChoice = UM.Preferences.getValue("measuretool/unit_factor");
+                for(var i = 0; i < unitsList.count; ++i)
+                {
+                    if(model.get(i).factor == currentChoice)
+                    {
+                        return i
+                    }
+                }
+            }
+
+            onActivated:
+            {
+                base.unitFactor = model.get(index).factor;
+                UM.Preferences.setValue("measuretool/unit_factor", base.unitFactor)
+            }
         }
     }
 }

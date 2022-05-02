@@ -62,6 +62,8 @@ class MeasureTool(Tool):
 
         self._selection_tool = None  # type: Optional[Tool]
 
+        self._application.getPreferences().addPreference("measuretool/unit_factor", 1)
+
     def getPointA(self) -> QVector3D:
         return self._points[0]
 
