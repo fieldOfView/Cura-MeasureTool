@@ -11,21 +11,27 @@ i18n_catalog = i18nCatalog("cura")
 
 
 def getMetaData():
+    cura_version = Version(Application.getInstance().getVersion())
+
+    tool_icon_path = "resources/icons/tool_icon.svg"
+    if cura_version < Version("4.11.0") and cura_version.getMajor() > 0:
+        tool_icon_path = "resources/icons/tool_icon_legacy.svg"
+
+    tool_panel_path = "resources/qml/MeasureTool.qml"
+    if cura_version < Version("5.0.0") and cura_version.getMajor() > 0:
+        tool_panel_path = "resources/qml_qt5/MeasureTool.qml"
+
     metadata = {
         "tool": {
             "name": i18n_catalog.i18nc("@label", "Measure"),
             "description": i18n_catalog.i18nc(
                 "@info:tooltip", "Measure parts of objects."
             ),
-            "icon": "resources/icons/tool_icon.svg",
-            "tool_panel": "resources/qml/MeasureTool.qml",
+            "icon": tool_icon_path,
+            "tool_panel": tool_panel_path,
             "weight": 6,
         }
     }
-
-    cura_version = Version(Application.getInstance().getVersion())
-    if cura_version < Version("4.11.0") and cura_version.getMajor() > 0:
-        metadata["tool"]["icon"] = "resources/icons/tool_icon_legacy.svg"
 
     return metadata
 

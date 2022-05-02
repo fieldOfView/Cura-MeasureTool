@@ -5,8 +5,7 @@ import QtQuick 2.2
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
 
-import UM 1.5 as UM
-import Cura 1.0 as Cura
+import UM 1.1 as UM
 
 Item
 {
@@ -55,174 +54,195 @@ Item
 
         Item { width: height; height: UM.Theme.getSize("setting_control").height }
 
-        UM.Label
+        Label
         {
             height: UM.Theme.getSize("setting_control").height
             text: catalog.i18nc("@label", "From")
             font: UM.ActiveTool.properties.getValue("ActivePoint") == 0 ? UM.Theme.getFont("default_bold") : UM.Theme.getFont("default")
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
             width: Math.ceil(contentWidth) //Make sure that the grid cells have an integer width.
-            Layout.preferredWidth: 50 * screenScaleFactor
         }
 
-        UM.Label
+        Label
         {
             height: UM.Theme.getSize("setting_control").height
             text: catalog.i18nc("@label", "To")
             font: UM.ActiveTool.properties.getValue("ActivePoint") == 1 ? UM.Theme.getFont("default_bold") : UM.Theme.getFont("default")
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
             width: Math.ceil(contentWidth) //Make sure that the grid cells have an integer width.
-            Layout.preferredWidth: 50 * screenScaleFactor
         }
 
-        UM.Label
+        Label
         {
             height: UM.Theme.getSize("setting_control").height
             text: catalog.i18nc("@label", "Distance")
+            font: UM.Theme.getFont("default")
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
             width: Math.ceil(contentWidth) //Make sure that the grid cells have an integer width.
-            Layout.preferredWidth: 50 * screenScaleFactor
         }
 
-        UM.Label
+        Label
         {
             height: UM.Theme.getSize("setting_control").height
             width: Math.ceil(contentWidth) //Make sure that the grid cells have an integer width.
             text: "X"
+            font: UM.Theme.getFont("default")
             color: UM.Theme.getColor("x_axis")
             verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
         }
 
-        UM.Label
+        Label
         {
             width: parent.cellWidth
             height: UM.Theme.getSize("setting_control").height
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
             text: base.formatMeasurement(parent.pointA.x)
         }
 
-        UM.Label
+        Label
         {
             width: parent.cellWidth
             height: UM.Theme.getSize("setting_control").height
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
             text: base.formatMeasurement(parent.pointB.x)
         }
 
-        UM.Label
+        Label
         {
             width: parent.cellWidth
             height: UM.Theme.getSize("setting_control").height
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
             text: base.formatMeasurement(Math.abs(parent.distance.x))
         }
 
-        UM.Label
+        Label
         {
             height: UM.Theme.getSize("setting_control").height
             width: Math.ceil(contentWidth) //Make sure that the grid cells have an integer width.
             text: "Y"
+            font: UM.Theme.getFont("default")
             color: UM.Theme.getColor("z_axis") // This is intentional. The internal axis are switched.
             verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
         }
 
-        UM.Label
+        Label
         {
             width: parent.cellWidth
             height: UM.Theme.getSize("setting_control").height
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
             text: base.formatMeasurement(parent.pointA.z)
         }
 
-        UM.Label
+        Label
         {
             width: parent.cellWidth
             height: UM.Theme.getSize("setting_control").height
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
             text: base.formatMeasurement(parent.pointB.z)
         }
 
-        UM.Label
+        Label
         {
             width: parent.cellWidth
             height: UM.Theme.getSize("setting_control").height
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
             text: base.formatMeasurement(Math.abs(parent.distance.z))
         }
 
-        UM.Label
+        Label
         {
             height: UM.Theme.getSize("setting_control").height;
             width: Math.ceil(contentWidth) //Make sure that the grid cells have an integer width.
             text: "Z";
+            font: UM.Theme.getFont("default")
             color: UM.Theme.getColor("y_axis") // This is intentional. The internal axis are switched.
             verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
         }
 
-        UM.Label
+        Label
         {
             width: parent.cellWidth
             height: UM.Theme.getSize("setting_control").height
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
             text: base.formatMeasurement(parent.pointA.y)
         }
 
-        UM.Label
+        Label
         {
             width: parent.cellWidth
             height: UM.Theme.getSize("setting_control").height
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
             text: base.formatMeasurement(parent.pointB.y)
         }
 
-        UM.Label
+        Label
         {
             width: parent.cellWidth
             height: UM.Theme.getSize("setting_control").height
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
             text: base.formatMeasurement(Math.abs(parent.distance.y))
         }
 
 
-        UM.Label
+        Label
         {
             height: UM.Theme.getSize("setting_control").height
             width: Math.ceil(contentWidth) //Make sure that the grid cells have an integer width.
             text: catalog.i18nc("@label", "Diagonal")
+            font: UM.Theme.getFont("default")
             color: UM.Theme.getColor("text") // This is intentional. The internal axis are switched.
             verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
         }
 
         Item { width: height; height: UM.Theme.getSize("setting_control").height; Layout.columnSpan:2 }
 
-        UM.Label
+        Label
         {
             width: parent.cellWidth
             height: UM.Theme.getSize("setting_control").height
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
             text: base.formatMeasurement(parent.distance.length())
         }
 
-        UM.Label
+        Label
         {
             height: UM.Theme.getSize("setting_control").height
             width: Math.ceil(contentWidth) //Make sure that the grid cells have an integer width.
             text: catalog.i18nc("@label", "Unit")
+            font: UM.Theme.getFont("default")
             color: UM.Theme.getColor("text") // This is intentional. The internal axis are switched.
             verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
         }
 
         ListModel
@@ -239,7 +259,7 @@ Item
             }
         }
 
-        Cura.ComboBox
+        ComboBox
         {
             id: unitDropDownButton
 
