@@ -48,11 +48,6 @@ class MeasurePass(RenderPass):
 
         self._shader.setUniformValue("u_axisId", self._axis)
 
-        width, height = self.getSize()
-        self._gl.glViewport(0, 0, width, height)
-        self._gl.glClearColor(1.0, 1.0, 1.0, 0.0)
-        self._gl.glClear(self._gl.GL_COLOR_BUFFER_BIT | self._gl.GL_DEPTH_BUFFER_BIT)
-
         # Create a new batch to be rendered
         batch = RenderBatch(self._shader)
 
@@ -72,7 +67,13 @@ class MeasurePass(RenderPass):
         buildplate_mesh = CuraApplication.getInstance().getBuildVolume()._grid_mesh
         batch.addItem(buildplate_transform, buildplate_mesh)
 
+        width, height = self.getSize()
+
         self.bind()
+        self._gl.glViewport(0, 0, width, height)
+        self._gl.glClearColor(1.0, 1.0, 1.0, 0.0)
+        self._gl.glClear(self._gl.GL_COLOR_BUFFER_BIT | self._gl.GL_DEPTH_BUFFER_BIT)
+
         batch.render(self._scene.getActiveCamera())
         self.release()
 
