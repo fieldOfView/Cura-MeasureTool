@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Measure Tool\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 15:44+0000\n"
+"POT-Creation-Date: 2022-05-03 13:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,27 +17,67 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: __init__.py:16 MeasureTool.py:125
+#: MeasureTool.py:127 __init__.py:26
 msgctxt "@label"
 msgid "Measure"
 msgstr ""
 
-#: __init__.py:18
+#: __init__.py:28
 msgctxt "@info:tooltip"
 msgid "Measure parts of objects."
 msgstr ""
 
-#: resources/qml/MeasureTool.qml:89
+#: resources/qml_qt5/MeasureTool.qml:60 resources/qml/MeasureTool.qml:61
 msgctxt "@label"
 msgid "From"
 msgstr ""
 
-#: resources/qml/MeasureTool.qml:132
+#: resources/qml_qt5/MeasureTool.qml:71 resources/qml/MeasureTool.qml:72
 msgctxt "@label"
 msgid "To"
 msgstr ""
 
-#: resources/qml/MeasureTool.qml:175
+#: resources/qml_qt5/MeasureTool.qml:82 resources/qml/MeasureTool.qml:83
 msgctxt "@label"
 msgid "Distance"
+msgstr ""
+
+#: resources/qml_qt5/MeasureTool.qml:218 resources/qml/MeasureTool.qml:203
+msgctxt "@label"
+msgid "Diagonal"
+msgstr ""
+
+#: resources/qml_qt5/MeasureTool.qml:241 resources/qml/MeasureTool.qml:223
+msgctxt "@label"
+msgid "Unit"
+msgstr ""
+
+#: resources/qml_qt5/MeasureTool.qml:253 resources/qml/MeasureTool.qml:233
+msgctxt "@option:unit"
+msgid "Micron"
+msgstr ""
+
+#: resources/qml_qt5/MeasureTool.qml:254 resources/qml/MeasureTool.qml:234
+msgctxt "@option:unit"
+msgid "Millimeter (default)"
+msgstr ""
+
+#: resources/qml_qt5/MeasureTool.qml:255 resources/qml/MeasureTool.qml:235
+msgctxt "@option:unit"
+msgid "Centimeter"
+msgstr ""
+
+#: resources/qml_qt5/MeasureTool.qml:256 resources/qml/MeasureTool.qml:236
+msgctxt "@option:unit"
+msgid "Meter"
+msgstr ""
+
+#: resources/qml_qt5/MeasureTool.qml:257 resources/qml/MeasureTool.qml:237
+msgctxt "@option:unit"
+msgid "Inch"
+msgstr ""
+
+#: resources/qml_qt5/MeasureTool.qml:258 resources/qml/MeasureTool.qml:238
+msgctxt "@option:unit"
+msgid "Feet"
 msgstr ""
