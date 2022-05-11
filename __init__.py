@@ -7,7 +7,7 @@ from UM.Version import Version
 from UM.Application import Application
 from UM.i18n import i18nCatalog
 
-i18n_catalog = i18nCatalog("cura")
+i18n_catalog = i18nCatalog("measuretool")
 
 
 def getMetaData():
