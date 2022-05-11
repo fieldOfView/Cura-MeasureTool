@@ -19,10 +19,12 @@ try:
     from PyQt6.QtCore import Qt, QObject
     from PyQt6.QtWidgets import QApplication
     from PyQt6.QtGui import QVector3D
+    KeyboardShiftModifier = Qt.KeyboardModifier.ShiftModifier
 except ImportError:
     from PyQt5.QtCore import Qt, QObject
     from PyQt5.QtWidgets import QApplication
     from PyQt5.QtGui import QVector3D
+    KeyboardShiftModifier = Qt.ShiftModifier
 
 from math import inf
 
@@ -193,11 +195,7 @@ class MeasureTool(Tool):
         ):
             mouse_event = cast(MouseEvent, event)
 
-            try:
-                shift_modifier = Qt.KeyboardModifier.ShiftModifier
-            except AttributeError:
-                shift_modifier = Qt.ShiftModifier
-            if QApplication.keyboardModifiers() & shift_modifier:
+            if QApplication.keyboardModifiers() & KeyboardShiftModifier:
                 if self._active_point == 0:
                     self._active_point = 1
                 else:
