@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Measure Tool\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-11 06:29+0000\n"
+"POT-Creation-Date: 2022-05-11 15:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,57 +27,57 @@ msgctxt "@info:tooltip"
 msgid "Measure parts of objects."
 msgstr ""
 
-#: resources/qml_qt5/MeasureTool.qml:60 resources/qml/MeasureTool.qml:61
+#: resources/qml/MeasureTool.qml:63 resources/qml_qt5/MeasureTool.qml:62
 msgctxt "@label"
 msgid "From"
 msgstr ""
 
-#: resources/qml_qt5/MeasureTool.qml:71 resources/qml/MeasureTool.qml:72
+#: resources/qml/MeasureTool.qml:74 resources/qml_qt5/MeasureTool.qml:73
 msgctxt "@label"
 msgid "To"
 msgstr ""
 
-#: resources/qml_qt5/MeasureTool.qml:82 resources/qml/MeasureTool.qml:83
+#: resources/qml/MeasureTool.qml:85 resources/qml_qt5/MeasureTool.qml:84
 msgctxt "@label"
 msgid "Distance"
 msgstr ""
 
-#: resources/qml_qt5/MeasureTool.qml:218 resources/qml/MeasureTool.qml:203
+#: resources/qml/MeasureTool.qml:205 resources/qml_qt5/MeasureTool.qml:220
 msgctxt "@label"
 msgid "Diagonal"
 msgstr ""
 
-#: resources/qml_qt5/MeasureTool.qml:241 resources/qml/MeasureTool.qml:223
+#: resources/qml/MeasureTool.qml:225 resources/qml_qt5/MeasureTool.qml:243
 msgctxt "@label"
 msgid "Unit"
 msgstr ""
 
-#: resources/qml_qt5/MeasureTool.qml:253 resources/qml/MeasureTool.qml:233
+#: resources/qml/MeasureTool.qml:235 resources/qml_qt5/MeasureTool.qml:255
 msgctxt "@option:unit"
 msgid "Micron"
 msgstr ""
 
-#: resources/qml_qt5/MeasureTool.qml:254 resources/qml/MeasureTool.qml:234
+#: resources/qml/MeasureTool.qml:236 resources/qml_qt5/MeasureTool.qml:256
 msgctxt "@option:unit"
 msgid "Millimeter (default)"
 msgstr ""
 
-#: resources/qml_qt5/MeasureTool.qml:255 resources/qml/MeasureTool.qml:235
+#: resources/qml/MeasureTool.qml:237 resources/qml_qt5/MeasureTool.qml:257
 msgctxt "@option:unit"
 msgid "Centimeter"
 msgstr ""
 
-#: resources/qml_qt5/MeasureTool.qml:256 resources/qml/MeasureTool.qml:236
+#: resources/qml/MeasureTool.qml:238 resources/qml_qt5/MeasureTool.qml:258
 msgctxt "@option:unit"
 msgid "Meter"
 msgstr ""
 
-#: resources/qml_qt5/MeasureTool.qml:257 resources/qml/MeasureTool.qml:237
+#: resources/qml/MeasureTool.qml:239 resources/qml_qt5/MeasureTool.qml:259
 msgctxt "@option:unit"
 msgid "Inch"
 msgstr ""
 
-#: resources/qml_qt5/MeasureTool.qml:258 resources/qml/MeasureTool.qml:238
+#: resources/qml/MeasureTool.qml:240 resources/qml_qt5/MeasureTool.qml:260
 msgctxt "@option:unit"
 msgid "Feet"
 msgstr ""
