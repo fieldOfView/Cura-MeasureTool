@@ -16,11 +16,15 @@ from .MeasurePass import MeasurePass
 from .MeasureToolHandle import MeasureToolHandle
 
 try:
+    from cura.ApplicationMetadata import CuraSDKVersion
+except ImportError: # Cura <= 3.6
+    CuraSDKVersion = "6.0.0"
+if CuraSDKVersion >= "8.0.0":
     from PyQt6.QtCore import Qt, QObject
     from PyQt6.QtWidgets import QApplication
     from PyQt6.QtGui import QVector3D
     KeyboardShiftModifier = Qt.KeyboardModifier.ShiftModifier
-except ImportError:
+else:
     from PyQt5.QtCore import Qt, QObject
     from PyQt5.QtWidgets import QApplication
     from PyQt5.QtGui import QVector3D
