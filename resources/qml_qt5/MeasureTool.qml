@@ -29,9 +29,11 @@ Item
         if (input !== undefined)
         {
             output = (input / unitFactor).toFixed(decimals);
-            if decimals > 0:
-                output = output.replace(/\.?0*$/, "")  // Match on periods, if any ( \.? ), followed by any number of zeros ( 0* ), then the end of string ( $ ).
-        }
+            if (decimals > 0)
+			{
+                output = output.replace(/\.?0*$/, "");  // Match on periods, if any ( \.? ), followed by any number of zeros ( 0* ), then the end of string ( $ ).
+			}
+		}
         if (output == "-0" || output == "")
         {
             output = "0";
