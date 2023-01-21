@@ -6,6 +6,7 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
 
 import UM 1.1 as UM
+import Cura 1.0 as Cura
 
 Item
 {
@@ -29,8 +30,10 @@ Item
         if (input !== undefined)
         {
             output = (input / unitFactor).toFixed(decimals);
-            if decimals > 0:
+            if (decimals > 0)
+            {
                 output = output.replace(/\.?0*$/, "")  // Match on periods, if any ( \.? ), followed by any number of zeros ( 0* ), then the end of string ( $ ).
+            }
         }
         if (output == "-0" || output == "")
         {
@@ -261,17 +264,16 @@ Item
             }
         }
 
-        ComboBox
+        Cura.ComboBox
         {
             id: unitDropDownButton
 
             Layout.columnSpan: 3
+            Layout.fillWidth: true
+            height: UM.Theme.getSize("combobox").height
 
             textRole: "text"
             model: unitsList
-
-            implicitWidth: UM.Theme.getSize("combobox").width
-            implicitHeight: UM.Theme.getSize("combobox").height
 
             currentIndex:
             {
