@@ -78,7 +78,7 @@ class MeasurePass(RenderPass):
         batch.render(self._scene.getActiveCamera())
         self.release()
 
-    ##  Get the distance in mm from the camera to at a certain pixel coordinate.
+    ## Get the coordinate along this pass axis in mm.
     def getPickedCoordinate(self, x: int, y: int) -> float:
         output = self.getOutput()
 
@@ -91,7 +91,7 @@ class MeasurePass(RenderPass):
             return inf
 
         value = output.pixel(px, py)  # value in micron, from in r, g & b channels
-        if value == 0x00FFFFFF:
+        if value == 0x00FFFFFF or value == 0x00000000:
             return inf
         value = (
             (value & 0x00FFFFFF) - 0x00800000
