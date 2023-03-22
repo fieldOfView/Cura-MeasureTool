@@ -29,6 +29,7 @@ class MeasurePass(RenderPass):
         super().__init__("picking", width, height)
 
         self._axis = axis
+        self._snap_vertices = True
 
         self._renderer = CuraApplication.getInstance().getRenderer()
 
@@ -47,6 +48,7 @@ class MeasurePass(RenderPass):
             )
 
         self._shader.setUniformValue("u_axisId", self._axis)
+        self._shader.setUniformValue("u_snapVertices", self._snap_vertices)
 
         # Create a new batch to be rendered
         batch = RenderBatch(self._shader)
