@@ -1,10 +1,6 @@
 # Copyright (c) 2022 Aldo Hoeben / fieldOfView
 # MeasureTool is released under the terms of the AGPLv3 or higher.
 
-from typing import Optional, TYPE_CHECKING
-import os.path
-from math import inf
-
 from cura.CuraApplication import CuraApplication
 from UM.Resources import Resources
 
@@ -17,6 +13,10 @@ from UM.Math.Vector import Vector
 
 from UM.Scene.Iterator.DepthFirstIterator import DepthFirstIterator
 
+import os.path
+from math import inf
+
+from typing import Optional, TYPE_CHECKING
 if TYPE_CHECKING:
     from UM.View.GL.ShaderProgram import ShaderProgram
 
@@ -29,14 +29,13 @@ class MeasurePass(RenderPass):
         super().__init__("picking", width, height)
 
         self._axis = axis
-        self._snap_vertices = True
 
         self._renderer = CuraApplication.getInstance().getRenderer()
 
         self._shader = None  # type: Optional[ShaderProgram]
         self._scene = CuraApplication.getInstance().getController().getScene()
 
-    def render(self) -> None:
+    def render(self, snap_vertices) -> None:
         if not self._shader:
             self._shader = OpenGL.getInstance().createShaderProgram(
                 os.path.join(
@@ -48,7 +47,7 @@ class MeasurePass(RenderPass):
             )
 
         self._shader.setUniformValue("u_axisId", self._axis)
-        self._shader.setUniformValue("u_snapVertices", self._snap_vertices)
+        self._shader.setUniformValue("u_snapVertices", snap_vertices)
 
         # Create a new batch to be rendered
         batch = RenderBatch(self._shader)

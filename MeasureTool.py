@@ -9,16 +9,17 @@ from UM.Scene.SceneNode import SceneNode
 from UM.Logger import Logger
 from UM.i18n import i18nCatalog
 from UM.Resources import Resources
+from UM.Version import Version
+from UM.View.GL.OpenGL import OpenGL
 
 from cura.CuraApplication import CuraApplication
-from cura.Scene.CuraSceneNode import CuraSceneNode
 
 from .MeasurePass import MeasurePass
 from .MeasureToolHandle import MeasureToolHandle
 
 try:
     from cura.ApplicationMetadata import CuraSDKVersion
-except ImportError: # Cura <= 3.6
+except ImportError:  # Cura <= 3.6
     CuraSDKVersion = "6.0.0"
 if CuraSDKVersion >= "8.0.0":
     from PyQt6.QtCore import Qt, QObject
@@ -32,6 +33,7 @@ else:
     KeyboardShiftModifier = Qt.ShiftModifier
 
 from math import inf
+import os.path
 
 from typing import cast, List, Optional
 
@@ -49,6 +51,8 @@ class MeasureTool(Tool):
         self._tool_enabled = False
         self._dragging = False
 
+        self._snap_vertices = False
+
         Resources.addSearchPath(
             os.path.abspath(os.path.dirname(__file__))
         )  # Plugin translation file import
@@ -59,10 +63,10 @@ class MeasureTool(Tool):
 
         self._handle = (
             MeasureToolHandle()
-        )  # type: MeasureToolHandle #Because for some reason MyPy thinks this variable contains Optional[ToolHandle].
+        )  # type: MeasureToolHandle  # Because for some reason MyPy thinks this variable contains Optional[ToolHandle].
         self._handle.setTool(self)
 
-        self.setExposedProperties("PointA", "PointB", "Distance", "ActivePoint")
+        self.setExposedProperties("PointA", "PointB", "Distance", "ActivePoint", "SnapVerticesSupported", "SnapVertices")
 
         self._application.engineCreatedSignal.connect(self._onEngineCreated)
         Selection.selectionChanged.connect(self._onSelectionChanged)
@@ -89,6 +93,19 @@ class MeasureTool(Tool):
     def setActivePoint(self, active_point: int) -> None:
         if active_point != self._active_point:
             self._active_point = active_point
+            self.propertyChanged.emit()
+
+    def getSnapVerticesSupported(self) -> bool:
+        # Use a dummy postfix, since an equal version with a postfix is considered smaller normally.
+        return Version(OpenGL.getInstance().getOpenGLVersion()) >= Version("4.1 dummy-postfix")
+
+    def getSnapVertices(self):
+        return self._snap_vertices
+
+    def setSnapVertices(self, snap):
+        if snap != self._snap_vertices:
+            self._snap_vertices = snap
+            self._measure_passes_dirty = True
             self.propertyChanged.emit()
 
     def _onEngineCreated(self) -> None:
@@ -266,7 +283,7 @@ class MeasureTool(Tool):
 
         for axis in self._measure_passes:
             if self._measure_passes_dirty:
-                axis.render()
+                axis.render(self._snap_vertices)
 
             axis_value = axis.getPickedCoordinate(mouse_event.x, mouse_event.y)
             if axis_value == inf:

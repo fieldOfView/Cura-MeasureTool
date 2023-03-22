@@ -220,6 +220,34 @@ Item
             text: base.formatMeasurement(parent.distance.length())
         }
 
+        Item
+        {
+            visible: snapVerticesCheckbox.visible
+            width: height
+            height: UM.Theme.getSize("setting_control").height
+        }
+
+        UM.CheckBox
+        {
+            id: snapVerticesCheckbox
+
+            Layout.columnSpan: 3
+
+            text: catalog.i18nc("@option:check", "Snap to model points")
+
+            checked: UM.ActiveTool.properties.getValue("SnapVertices")
+            onClicked: UM.ActiveTool.setProperty("SnapVertices", checked)
+
+            visible: UM.ActiveTool.properties.getValue("SnapVerticesSupported")
+        }
+
+        Binding
+        {
+            target: snapVerticesCheckbox
+            property: "checked"
+            value: UM.ActiveTool.properties.getValue("SnapVertices")
+        }
+
         UM.Label
         {
             height: UM.Theme.getSize("setting_control").height
