@@ -8,6 +8,7 @@ from UM.Scene.Selection import Selection
 from UM.Scene.SceneNode import SceneNode
 from UM.Logger import Logger
 from UM.i18n import i18nCatalog
+from UM.Resources import Resources
 
 from cura.CuraApplication import CuraApplication
 from cura.Scene.CuraSceneNode import CuraSceneNode
@@ -48,6 +49,9 @@ class MeasureTool(Tool):
         self._tool_enabled = False
         self._dragging = False
 
+        Resources.addSearchPath(
+            os.path.abspath(os.path.dirname(__file__))
+        )  # Plugin translation file import
         self._i18n_catalog = i18nCatalog("measuretool")
 
         self._points = [QVector3D(), QVector3D()]
