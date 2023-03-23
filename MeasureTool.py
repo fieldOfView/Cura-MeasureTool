@@ -79,6 +79,11 @@ class MeasureTool(Tool):
 
         self._application.getPreferences().addPreference("measuretool/unit_factor", 1)
 
+    def resetPoints(self) -> None:
+        self._points = [QVector3D(), QVector3D()]
+        self.propertyChanged.emit()
+        self._controller.getScene().sceneChanged.emit(self._handle)
+
     def getPointA(self) -> QVector3D:
         return self._points[0]
 
@@ -96,10 +101,10 @@ class MeasureTool(Tool):
             self._active_point = active_point
             self.propertyChanged.emit()
 
-    def getFromLocked(self):
+    def getFromLocked(self) -> bool:
         return self._from_locked
 
-    def setFromLocked(self, locked):
+    def setFromLocked(self, locked) -> None:
         if locked != self._from_locked:
             self._from_locked = locked
             self._active_point = 1
@@ -109,10 +114,10 @@ class MeasureTool(Tool):
         # Use a dummy postfix, since an equal version with a postfix is considered smaller normally.
         return Version(OpenGL.getInstance().getOpenGLVersion()) >= Version("4.1 dummy-postfix")
 
-    def getSnapVertices(self):
+    def getSnapVertices(self) -> bool:
         return self._snap_vertices
 
-    def setSnapVertices(self, snap):
+    def setSnapVertices(self, snap) -> None:
         if snap != self._snap_vertices:
             self._snap_vertices = snap
             self._measure_passes_dirty = True

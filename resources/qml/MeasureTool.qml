@@ -44,7 +44,7 @@ Item
 
     GridLayout
     {
-        id: textfields
+        id: contentGrid
 
         anchors.leftMargin: UM.Theme.getSize("default_margin").width
         anchors.top: parent.top
@@ -61,7 +61,7 @@ Item
         UM.SimpleButton
         {
             id: fromLockedToggle
-            iconSource: Qt.resolvedUrl(textfields.fromLocked == true ? "../icons/Locked.svg" : "../icons/Unlocked.svg")
+            iconSource: Qt.resolvedUrl(contentGrid.fromLocked == true ? "../icons/Locked.svg" : "../icons/Unlocked.svg")
 
             width: UM.Theme.getSize("standard_arrow").width
             height: UM.Theme.getSize("standard_arrow").height
@@ -72,8 +72,8 @@ Item
 
             onClicked:
             {
-                textfields.fromLocked = !textfields.fromLocked
-                UM.ActiveTool.setProperty("FromLocked", textfields.fromLocked)
+                contentGrid.fromLocked = !contentGrid.fromLocked
+                UM.ActiveTool.setProperty("FromLocked", contentGrid.fromLocked)
             }
         }
 
@@ -238,12 +238,29 @@ Item
             text: parent.distance == undefined ? "0" : base.formatMeasurement(parent.distance.length())
         }
 
+        UM.ToolbarButton
+        {
+            id: resetPoints
+
+            Layout.rowSpan: 2
+
+            text: catalog.i18nc("@action:button", "Reset")
+            toolItem: UM.ColorImage
+            {
+                source: UM.Theme.getIcon("ArrowReset")
+                color: UM.Theme.getColor("icon")
+            }
+            property bool needBorder: true
+
+            onClicked: UM.ActiveTool.triggerAction("resetPoints")
+        }
+
         UM.Label
         {
             height: UM.Theme.getSize("setting_control").height
-            width: Math.ceil(contentWidth) //Make sure that the grid cells have an integer width.
+            width: Math.ceil(contentWidth) // Make sure that the grid cells have an integer width.
             text: catalog.i18nc("@label", "Unit")
-            color: UM.Theme.getColor("text") // This is intentional. The internal axis are switched.
+            color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
         }
 
@@ -265,7 +282,7 @@ Item
         {
             id: unitDropDownButton
 
-            Layout.columnSpan: 3
+            Layout.columnSpan: 2
             Layout.fillWidth: true
             implicitHeight: UM.Theme.getSize("combobox").height
 
@@ -289,13 +306,6 @@ Item
                 base.unitFactor = model.get(index).factor;
                 UM.Preferences.setValue("measuretool/unit_factor", base.unitFactor)
             }
-        }
-
-        Item
-        {
-            visible: snapVerticesCheckbox.visible
-            width: height
-            height: UM.Theme.getSize("setting_control").height
         }
 
         UM.CheckBox
