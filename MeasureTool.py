@@ -51,6 +51,7 @@ class MeasureTool(Tool):
         self._tool_enabled = False
         self._dragging = False
 
+        self._from_locked = False
         self._snap_vertices = False
 
         Resources.addSearchPath(
@@ -66,7 +67,7 @@ class MeasureTool(Tool):
         )  # type: MeasureToolHandle  # Because for some reason MyPy thinks this variable contains Optional[ToolHandle].
         self._handle.setTool(self)
 
-        self.setExposedProperties("PointA", "PointB", "Distance", "ActivePoint", "SnapVerticesSupported", "SnapVertices")
+        self.setExposedProperties("PointA", "PointB", "Distance", "ActivePoint", "FromLocked", "SnapVerticesSupported", "SnapVertices")
 
         self._application.engineCreatedSignal.connect(self._onEngineCreated)
         Selection.selectionChanged.connect(self._onSelectionChanged)
@@ -93,6 +94,15 @@ class MeasureTool(Tool):
     def setActivePoint(self, active_point: int) -> None:
         if active_point != self._active_point:
             self._active_point = active_point
+            self.propertyChanged.emit()
+
+    def getFromLocked(self):
+        return self._from_locked
+
+    def setFromLocked(self, locked):
+        if locked != self._from_locked:
+            self._from_locked = locked
+            self._active_point = 1
             self.propertyChanged.emit()
 
     def getSnapVerticesSupported(self) -> bool:
@@ -183,7 +193,6 @@ class MeasureTool(Tool):
 
             self._toolbutton_item = self._findToolbarIcon(main_window.contentItem())
 
-
     def event(self, event: Event) -> bool:
         result = super().event(event)
 
@@ -220,7 +229,9 @@ class MeasureTool(Tool):
         ):
             mouse_event = cast(MouseEvent, event)
 
-            if QApplication.keyboardModifiers() & KeyboardShiftModifier:
+            if self._from_locked:
+                self._active_point = 1
+            elif QApplication.keyboardModifiers() & KeyboardShiftModifier:
                 if self._active_point == 0:
                     self._active_point = 1
                 else:
@@ -261,18 +272,18 @@ class MeasureTool(Tool):
                     self._active_point = 1
 
             self._dragging = True
-            result = self._handle_mouse_event(event, result)
+            result = self._handleMouseEvent(event, result)
 
         if event.type == Event.MouseMoveEvent:
             if self._dragging:
-                result = self._handle_mouse_event(event, result)
+                result = self._handleMouseEvent(event, result)
 
         if self._selection_tool:
             self._selection_tool.event(event)
 
         return result
 
-    def _handle_mouse_event(self, event: Event, result: bool) -> bool:
+    def _handleMouseEvent(self, event: Event, result: bool) -> bool:
         if not self._measure_passes:
             self._createPickingPass()
         if not self._measure_passes:

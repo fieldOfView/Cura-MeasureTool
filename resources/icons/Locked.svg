@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   viewBox="0 0 24 24"
+   id="svg4"
+   sodipodi:docname="Locked.svg"
+   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="48.625"
+     inkscape:cx="11.341902"
+     inkscape:cy="12"
+     inkscape:window-width="2256"
+     inkscape:window-height="1425"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4" />
+  <path
+     id="path2"
+     d="M 9 3.328125 C 7.3000047 3.328125 6 4.6281287 6 6.328125 L 6 10 L 5 10 C 3.3000017 10 2 11.300002 2 13 L 2 19 C 2 20.699998 3.3000017 22 5 22 L 19 22 C 20.699998 22 22 20.699998 22 19 L 22 13 C 22 11.300002 20.699998 10 19 10 L 18 10 L 18 6.328125 C 18 4.6281287 16.699996 3.328125 15 3.328125 L 9 3.328125 z M 8 5.328125 L 16 5.328125 L 16 10 L 8 10 L 8 5.328125 z M 4 12 L 20 12 L 20 20 L 4 20 L 4 12 z " />
+  <path
+     id="circle2871"
+     d="m 12,13.75 a 1.5,1.5 0 0 0 -1.5,1.5 1.5,1.5 0 0 0 0.5,1.115234 V 18.25 h 2 V 16.365234 A 1.5,1.5 0 0 0 13.5,15.25 1.5,1.5 0 0 0 12,13.75 Z" />
+</svg>

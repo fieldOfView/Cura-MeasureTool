@@ -56,8 +56,26 @@ Item
         property var pointA: UM.ActiveTool.properties.getValue("PointA")
         property var pointB: UM.ActiveTool.properties.getValue("PointB")
         property var distance: UM.ActiveTool.properties.getValue("Distance")
+        property var fromLocked: UM.ActiveTool.properties.getValue("FromLocked")
 
-        Item { width: height; height: UM.Theme.getSize("setting_control").height }
+        UM.SimpleButton
+        {
+            id: fromLockedToggle
+            iconSource: Qt.resolvedUrl(textfields.fromLocked == true ? "../icons/Locked.svg" : "../icons/Unlocked.svg")
+
+            width: UM.Theme.getSize("standard_arrow").width
+            height: UM.Theme.getSize("standard_arrow").height
+            hoverColor: UM.Theme.getColor("small_button_text_hover")
+            color:  UM.Theme.getColor("small_button_text")
+
+            Layout.alignment: Qt.AlignRight
+
+            onClicked:
+            {
+                textfields.fromLocked = !textfields.fromLocked
+                UM.ActiveTool.setProperty("FromLocked", textfields.fromLocked)
+            }
+        }
 
         UM.Label
         {
@@ -106,7 +124,7 @@ Item
             height: UM.Theme.getSize("setting_control").height
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
-            text: base.formatMeasurement(parent.pointA.x)
+            text: parent.pointA == undefined ? "0" : base.formatMeasurement(parent.pointA.x)
         }
 
         UM.Label
@@ -115,7 +133,7 @@ Item
             height: UM.Theme.getSize("setting_control").height
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
-            text: base.formatMeasurement(parent.pointB.x)
+            text: parent.pointB == undefined ? "0" : base.formatMeasurement(parent.pointB.x)
         }
 
         UM.Label
@@ -124,7 +142,7 @@ Item
             height: UM.Theme.getSize("setting_control").height
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
-            text: base.formatMeasurement(Math.abs(parent.distance.x))
+            text: parent.distance == undefined ? "0" : base.formatMeasurement(Math.abs(parent.distance.x))
         }
 
         UM.Label
@@ -142,7 +160,7 @@ Item
             height: UM.Theme.getSize("setting_control").height
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
-            text: base.formatMeasurement(parent.pointA.z)
+            text: parent.pointA == undefined ? "0" : base.formatMeasurement(parent.pointA.z)
         }
 
         UM.Label
@@ -151,7 +169,7 @@ Item
             height: UM.Theme.getSize("setting_control").height
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
-            text: base.formatMeasurement(parent.pointB.z)
+            text: parent.pointB == undefined ? "0" : base.formatMeasurement(parent.pointB.z)
         }
 
         UM.Label
@@ -160,7 +178,7 @@ Item
             height: UM.Theme.getSize("setting_control").height
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
-            text: base.formatMeasurement(Math.abs(parent.distance.z))
+            text: parent.distance == undefined ? "0" : base.formatMeasurement(Math.abs(parent.distance.z))
         }
 
         UM.Label
@@ -178,7 +196,7 @@ Item
             height: UM.Theme.getSize("setting_control").height
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
-            text: base.formatMeasurement(parent.pointA.y)
+            text: parent.pointA == undefined ? "0" : base.formatMeasurement(parent.pointA.y)
         }
 
         UM.Label
@@ -187,7 +205,7 @@ Item
             height: UM.Theme.getSize("setting_control").height
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
-            text: base.formatMeasurement(parent.pointB.y)
+            text: parent.pointB == undefined ? "0" : base.formatMeasurement(parent.pointB.y)
         }
 
         UM.Label
@@ -196,7 +214,7 @@ Item
             height: UM.Theme.getSize("setting_control").height
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
-            text: base.formatMeasurement(Math.abs(parent.distance.y))
+            text: parent.distance == undefined ? "0" : base.formatMeasurement(Math.abs(parent.distance.y))
         }
 
 
@@ -217,35 +235,7 @@ Item
             height: UM.Theme.getSize("setting_control").height
             color: UM.Theme.getColor("text")
             verticalAlignment: Text.AlignVCenter
-            text: base.formatMeasurement(parent.distance.length())
-        }
-
-        Item
-        {
-            visible: snapVerticesCheckbox.visible
-            width: height
-            height: UM.Theme.getSize("setting_control").height
-        }
-
-        UM.CheckBox
-        {
-            id: snapVerticesCheckbox
-
-            Layout.columnSpan: 3
-
-            text: catalog.i18nc("@option:check", "Snap to model points")
-
-            checked: UM.ActiveTool.properties.getValue("SnapVertices")
-            onClicked: UM.ActiveTool.setProperty("SnapVertices", checked)
-
-            visible: UM.ActiveTool.properties.getValue("SnapVerticesSupported")
-        }
-
-        Binding
-        {
-            target: snapVerticesCheckbox
-            property: "checked"
-            value: UM.ActiveTool.properties.getValue("SnapVertices")
+            text: parent.distance == undefined ? "0" : base.formatMeasurement(parent.distance.length())
         }
 
         UM.Label
@@ -299,6 +289,34 @@ Item
                 base.unitFactor = model.get(index).factor;
                 UM.Preferences.setValue("measuretool/unit_factor", base.unitFactor)
             }
+        }
+
+        Item
+        {
+            visible: snapVerticesCheckbox.visible
+            width: height
+            height: UM.Theme.getSize("setting_control").height
+        }
+
+        UM.CheckBox
+        {
+            id: snapVerticesCheckbox
+
+            Layout.columnSpan: 3
+
+            text: catalog.i18nc("@option:check", "Snap to model points")
+
+            checked: UM.ActiveTool.properties.getValue("SnapVertices")
+            onClicked: UM.ActiveTool.setProperty("SnapVertices", checked)
+
+            visible: UM.ActiveTool.properties.getValue("SnapVerticesSupported") == true
+        }
+
+        Binding
+        {
+            target: snapVerticesCheckbox
+            property: "checked"
+            value: UM.ActiveTool.properties.getValue("SnapVertices")
         }
     }
 }
