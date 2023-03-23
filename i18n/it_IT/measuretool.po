@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Measure Tool\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-23 10:25+0000\n"
-"PO-Revision-Date: 2023-03-23 08:35+0100\n"
+"PO-Revision-Date: 2023-03-23 14:58+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: it_IT\n"
@@ -26,7 +26,7 @@ msgstr "Misura"
 #: __init__.py:28
 msgctxt "@info:tooltip"
 msgid "Measure parts of objects."
-msgstr "Misura le parti degli oggetti"
+msgstr "Misura le parti degli oggetti."
 
 #: resources/qml/MeasureTool.qml:83 resources/qml_qt5/MeasureTool.qml:65
 msgctxt "@label"
@@ -51,7 +51,7 @@ msgstr "Diagonale"
 #: resources/qml/MeasureTool.qml:247
 msgctxt "@action:button"
 msgid "Reset"
-msgstr ""
+msgstr "Resetta"
 
 #: resources/qml/MeasureTool.qml:262 resources/qml_qt5/MeasureTool.qml:246
 msgctxt "@label"
