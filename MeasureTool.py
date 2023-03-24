@@ -54,9 +54,10 @@ class MeasureTool(Tool):
         self._from_locked = False
         self._snap_vertices = False
 
-        Resources.addSearchPath(
-            os.path.abspath(os.path.dirname(__file__))
-        )  # Plugin translation file import
+        Resources.addSearchPath(os.path.abspath(os.path.join(
+            os.path.dirname(__file__),
+            "resources"
+        )))  # Plugin translation file import
         self._i18n_catalog = i18nCatalog("measuretool")
 
         self._points = [QVector3D(), QVector3D()]
