@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Measure Tool\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-23 10:25+0000\n"
+"POT-Creation-Date: 2023-03-24 16:13+0000\n"
 "PO-Revision-Date: 2023-03-23 14:58+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.1.1\n"
 
-#: __init__.py:26 MeasureTool.py:169
+#: __init__.py:26 MeasureTool.py:170
 msgctxt "@label"
 msgid "Measure"
 msgstr "Misura"
@@ -28,67 +28,72 @@ msgctxt "@info:tooltip"
 msgid "Measure parts of objects."
 msgstr "Misura le parti degli oggetti."
 
-#: resources/qml/MeasureTool.qml:83 resources/qml_qt5/MeasureTool.qml:65
+#: resources/qml/MeasureTool.qml:82
+msgctxt "@action:button"
+msgid "Toggle fixing the 'From' point in place"
+msgstr ""
+
+#: resources/qml/MeasureTool.qml:90 resources/qml_qt5/MeasureTool.qml:65
 msgctxt "@label"
 msgid "From"
 msgstr "Da"
 
-#: resources/qml/MeasureTool.qml:94 resources/qml_qt5/MeasureTool.qml:76
+#: resources/qml/MeasureTool.qml:101 resources/qml_qt5/MeasureTool.qml:76
 msgctxt "@label"
 msgid "To"
 msgstr "A"
 
-#: resources/qml/MeasureTool.qml:105 resources/qml_qt5/MeasureTool.qml:87
+#: resources/qml/MeasureTool.qml:112 resources/qml_qt5/MeasureTool.qml:87
 msgctxt "@label"
 msgid "Distance"
 msgstr "Distanza"
 
-#: resources/qml/MeasureTool.qml:225 resources/qml_qt5/MeasureTool.qml:223
+#: resources/qml/MeasureTool.qml:232 resources/qml_qt5/MeasureTool.qml:223
 msgctxt "@label"
 msgid "Diagonal"
 msgstr "Diagonale"
 
-#: resources/qml/MeasureTool.qml:247
+#: resources/qml/MeasureTool.qml:254
 msgctxt "@action:button"
 msgid "Reset"
 msgstr "Resetta"
 
-#: resources/qml/MeasureTool.qml:262 resources/qml_qt5/MeasureTool.qml:246
+#: resources/qml/MeasureTool.qml:269 resources/qml_qt5/MeasureTool.qml:246
 msgctxt "@label"
 msgid "Unit"
 msgstr "Unità"
 
-#: resources/qml/MeasureTool.qml:272 resources/qml_qt5/MeasureTool.qml:258
+#: resources/qml/MeasureTool.qml:279 resources/qml_qt5/MeasureTool.qml:258
 msgctxt "@option:unit"
 msgid "Micron"
 msgstr "Micron"
 
-#: resources/qml/MeasureTool.qml:273 resources/qml_qt5/MeasureTool.qml:259
+#: resources/qml/MeasureTool.qml:280 resources/qml_qt5/MeasureTool.qml:259
 msgctxt "@option:unit"
 msgid "Millimeter (default)"
 msgstr "Millimetri (default)"
 
-#: resources/qml/MeasureTool.qml:274 resources/qml_qt5/MeasureTool.qml:260
+#: resources/qml/MeasureTool.qml:281 resources/qml_qt5/MeasureTool.qml:260
 msgctxt "@option:unit"
 msgid "Centimeter"
 msgstr "Centimetri"
 
-#: resources/qml/MeasureTool.qml:275 resources/qml_qt5/MeasureTool.qml:261
+#: resources/qml/MeasureTool.qml:282 resources/qml_qt5/MeasureTool.qml:261
 msgctxt "@option:unit"
 msgid "Meter"
 msgstr "Metri"
 
-#: resources/qml/MeasureTool.qml:276 resources/qml_qt5/MeasureTool.qml:262
+#: resources/qml/MeasureTool.qml:283 resources/qml_qt5/MeasureTool.qml:262
 msgctxt "@option:unit"
 msgid "Inch"
 msgstr "Pollici"
 
-#: resources/qml/MeasureTool.qml:277 resources/qml_qt5/MeasureTool.qml:263
+#: resources/qml/MeasureTool.qml:284 resources/qml_qt5/MeasureTool.qml:263
 msgctxt "@option:unit"
 msgid "Feet"
 msgstr "Piedi"
 
-#: resources/qml/MeasureTool.qml:317 resources/qml_qt5/MeasureTool.qml:310
+#: resources/qml/MeasureTool.qml:324 resources/qml_qt5/MeasureTool.qml:310
 msgctxt "@option:check"
 msgid "Snap to model points"
 msgstr "Aggancia ai punti del modello"
