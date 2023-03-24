@@ -75,6 +75,13 @@ Item
                 contentGrid.fromLocked = !contentGrid.fromLocked
                 UM.ActiveTool.setProperty("FromLocked", contentGrid.fromLocked)
             }
+
+            UM.ToolTip
+            {
+                id: tooltip
+                tooltipText: catalog.i18nc("@action:button", "Toggle fixing the 'From' point in place")
+                visible: parent.hovered
+            }
         }
 
         UM.Label
