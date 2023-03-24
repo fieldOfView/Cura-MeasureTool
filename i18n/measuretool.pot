@@ -1,0 +1,93 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Measure Tool package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Measure Tool\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-24 10:54+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: __init__.py:26 MeasureTool.py:170
+msgctxt "@label"
+msgid "Measure"
+msgstr ""
+
+#: __init__.py:28
+msgctxt "@info:tooltip"
+msgid "Measure parts of objects."
+msgstr ""
+
+#: resources/qml/MeasureTool.qml:83 resources/qml_qt5/MeasureTool.qml:65
+msgctxt "@label"
+msgid "From"
+msgstr ""
+
+#: resources/qml/MeasureTool.qml:94 resources/qml_qt5/MeasureTool.qml:76
+msgctxt "@label"
+msgid "To"
+msgstr ""
+
+#: resources/qml/MeasureTool.qml:105 resources/qml_qt5/MeasureTool.qml:87
+msgctxt "@label"
+msgid "Distance"
+msgstr ""
+
+#: resources/qml/MeasureTool.qml:225 resources/qml_qt5/MeasureTool.qml:223
+msgctxt "@label"
+msgid "Diagonal"
+msgstr ""
+
+#: resources/qml/MeasureTool.qml:247
+msgctxt "@action:button"
+msgid "Reset"
+msgstr ""
+
+#: resources/qml/MeasureTool.qml:262 resources/qml_qt5/MeasureTool.qml:246
+msgctxt "@label"
+msgid "Unit"
+msgstr ""
+
+#: resources/qml/MeasureTool.qml:272 resources/qml_qt5/MeasureTool.qml:258
+msgctxt "@option:unit"
+msgid "Micron"
+msgstr ""
+
+#: resources/qml/MeasureTool.qml:273 resources/qml_qt5/MeasureTool.qml:259
+msgctxt "@option:unit"
+msgid "Millimeter (default)"
+msgstr ""
+
+#: resources/qml/MeasureTool.qml:274 resources/qml_qt5/MeasureTool.qml:260
+msgctxt "@option:unit"
+msgid "Centimeter"
+msgstr ""
+
+#: resources/qml/MeasureTool.qml:275 resources/qml_qt5/MeasureTool.qml:261
+msgctxt "@option:unit"
+msgid "Meter"
+msgstr ""
+
+#: resources/qml/MeasureTool.qml:276 resources/qml_qt5/MeasureTool.qml:262
+msgctxt "@option:unit"
+msgid "Inch"
+msgstr ""
+
+#: resources/qml/MeasureTool.qml:277 resources/qml_qt5/MeasureTool.qml:263
+msgctxt "@option:unit"
+msgid "Feet"
+msgstr ""
+
+#: resources/qml/MeasureTool.qml:317 resources/qml_qt5/MeasureTool.qml:310
+msgctxt "@option:check"
+msgid "Snap to model points"
+msgstr ""
