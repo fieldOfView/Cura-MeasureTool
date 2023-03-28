@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Measure Tool\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-24 16:13+0000\n"
-"PO-Revision-Date: 2023-03-23 15:11+0100\n"
+"PO-Revision-Date: 2023-03-28 11:22+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nl_NL\n"
@@ -31,7 +31,7 @@ msgstr "Meet delen van objecten."
 #: resources/qml/MeasureTool.qml:82
 msgctxt "@action:button"
 msgid "Toggle fixing the 'From' point in place"
-msgstr ""
+msgstr "Zet het \"Van\" punt vast of los"
 
 #: resources/qml/MeasureTool.qml:90 resources/qml_qt5/MeasureTool.qml:65
 msgctxt "@label"
